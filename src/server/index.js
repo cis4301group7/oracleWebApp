@@ -1,17 +1,18 @@
 const express = require('express');
 const path = require('path');
 
-var projectController = require('./projects.controller');
+// var projectController = require('./projects.controller');
+var appDBController = require('./appDB.controller');
 
 const app = express();
 // const PORT = process.env.PORT || 8080;
 
-app.get("/api/getAllProposedProjects", projectController.getAllProposedProjects);
-app.get("/api/getAllCurrentProjects", projectController.getAllCurrentProjects);
-app.get("/api/getAllArchivedProjects", projectController.getAllArchivedProjects);
-app.get("/api/getSelectedProject", projectController.getSelectedProject);
+// app.get("/api/getAllProposedProjects", projectController.getAllProposedProjects);
+// app.get("/api/getAllCurrentProjects", projectController.getAllCurrentProjects);
+// app.get("/api/getAllArchivedProjects", projectController.getAllArchivedProjects);
+// app.get("/api/getSelectedProject", projectController.getSelectedProject);
 
-app.post("/api/addProjectProposal", projectController.addProjectProposal);
+// app.post("/api/addProjectProposal", projectController.addProjectProposal);
 
 app.use(express.static('dist'));
 

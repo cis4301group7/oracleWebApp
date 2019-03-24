@@ -4,6 +4,9 @@ import Person from '@material-ui/icons/Person';
 // import ContentPaste from "@material-ui/icons/ContentPaste";
 import BubbleChart from '@material-ui/icons/BubbleChart';
 import Book from '@material-ui/icons/Book';
+import LibraryBooks from "@material-ui/icons/LibraryBooks";
+import LocationOn from "@material-ui/icons/LocationOn";
+import Notifications from "@material-ui/icons/Notifications";
 import Propose from '@material-ui/icons/NoteAdd';
 import Find from '@material-ui/icons/FindInPage';
 import PastProj from '@material-ui/icons/ViewCarousel';
@@ -29,6 +32,17 @@ import Surveys from '../views/Surveys/Surveys.jsx';
 import NewSurvey from '../views/Surveys/NewSurvey.jsx';
 import SurveyResults from '../views/Surveys/SurveyResults.jsx';
 import OGDashboardPage from '../views/OGDashboard/OGDashboard.jsx';
+import TeamStats from '../views/TeamStats/TeamStats.jsx';
+import SpecificTeamStats from '../views/SpecificTeamStats/SpecificTeamStats.jsx';
+import PositionStats from '../views/PositionStats/PositionStats.jsx';
+import IndividualStats from '../views/IndividualStats/IndividualStats.jsx';
+import AggregatePlayerStats from '../views/AggregatePlayerStats/AggregatePlayerStats.jsx';
+import SpecificPlayerStats from '../views/SpecificPlayerStats/SpecificPlayerStats.jsx';
+import ManagerStats from '../views/ManagerStats/ManagerStats.jsx';
+import SpecificManagerStats from '../views/SpecificManagerStats/SpecificManagerStats.jsx';
+import AggregateManagerStats from '../views/AggregateManagerStats/AggregateManagerStats.jsx';
+import HonorsAwards from '../views/HonorsAwards/HonorsAwards.jsx';
+import Details from '../views/Details/Details.jsx';
 
 const dashboardRoutes = [
   {
@@ -39,7 +53,7 @@ const dashboardRoutes = [
     component: DashboardPage
   },
   {
-    path: '/dashboard/:userID',
+    path: '/dashboard:userID',
     sidebarName: 'Dashboard',
     navbarName: 'Client Dashboard',
     icon: Dashboard,
@@ -51,6 +65,90 @@ const dashboardRoutes = [
     navbarName: 'OGDashboard',
     icon: Dashboard,
     component: OGDashboardPage
+  },
+  {
+    path: '/teamstats',
+    sidebarName: 'Teams',
+    navbarName: 'Team Stats',
+    icon: Survey,
+    component: TeamStats
+  },
+  {
+    path: '/specificteamstats:ID',
+    sidebarName: 'Specific Teams',
+    navbarName: 'Specific Team Stats',
+    icon: Survey,
+    component: SpecificTeamStats
+  },
+  {
+    path: '/positionstats',
+    sidebarName: 'Positions',
+    navbarName: 'Position Stats',
+    icon: Survey,
+    component: PositionStats
+  },
+  {
+    path: '/individualstats',
+    sidebarName: 'Individuals',
+    navbarName: 'Individual Stats',
+    icon: Survey,
+    component: IndividualStats
+  },
+  {
+    path: '/aggregateplayerstats',
+    sidebarName: 'Aggregate Players',
+    navbarName: 'Aggregate Player Stats',
+    icon: Survey,
+    component: AggregatePlayerStats
+  },
+  {
+    path: '/specificplayerstats',
+    sidebarName: 'Specific Player Stats',
+    navbarName: 'Specific Player Stats',
+    icon: Survey,
+    component: SpecificPlayerStats
+  },
+  {
+    path: '/specificplayerstats:ID',
+    sidebarName: 'Specific Player Stats',
+    navbarName: 'Specific Player Stats',
+    icon: Survey,
+    component: SpecificPlayerStats
+  },
+  {
+    path: '/managerstats',
+    sidebarName: 'Managers',
+    navbarName: 'Manager Stats',
+    icon: Survey,
+    component: ManagerStats
+  },
+  {
+    path: '/specificmanagerstats:ID',
+    sidebarName: 'Specific Manager Stats',
+    navbarName: 'Specific Manager Stats',
+    icon: Survey,
+    component: SpecificManagerStats
+  },
+  {
+    path: '/aggregatemanagerstats',
+    sidebarName: 'Aggregate Managers',
+    navbarName: 'Aggregate Manager Stats',
+    icon: Survey,
+    component: AggregateManagerStats
+  },
+  {
+    path: '/honorsawards',
+    sidebarName: 'Honors',
+    navbarName: 'Awards & Honors',
+    icon: Survey,
+    component: HonorsAwards
+  },
+  {
+    path: '/details',
+    sidebarName: 'Details',
+    navbarName: 'Details',
+    icon: Survey,
+    component: Details
   },
   {
     path: '/user',
@@ -213,20 +311,20 @@ const dashboardRoutes = [
     icon: Survey,
     component: SurveyResults
   },
-  // {
-  //   path: "/table",
-  //   sidebarName: "Table List",
-  //   navbarName: "Table List",
-  //   icon: "content_paste",
-  //   component: TableList
-  // },
-  // {
-  //   path: "/typography",
-  //   sidebarName: "Typography",
-  //   navbarName: "Typography",
-  //   icon: LibraryBooks,
-  //   component: Typography
-  // },
+  {
+    path: "/table",
+    sidebarName: "Table List",
+    navbarName: "Table List",
+    icon: "content_paste",
+    component: TableList
+  },
+  {
+    path: "/typography",
+    sidebarName: "Typography",
+    navbarName: "Typography",
+    icon: LibraryBooks,
+    component: Typography
+  },
   {
     path: '/icons',
     sidebarName: 'Icons',
@@ -234,20 +332,20 @@ const dashboardRoutes = [
     icon: BubbleChart,
     component: Icons
   },
-  // {
-  //   path: "/maps",
-  //   sidebarName: "Maps",
-  //   navbarName: "Map",
-  //   icon: LocationOn,
-  //   component: Maps
-  // },
-  // {
-  //   path: "/notifications",
-  //   sidebarName: "Notifications",
-  //   navbarName: "Notifications",
-  //   icon: Notifications,
-  //   component: NotificationsPage
-  // },
+  {
+    path: "/maps",
+    sidebarName: "Maps",
+    navbarName: "Map",
+    icon: LocationOn,
+    component: Maps
+  },
+  {
+    path: "/notifications",
+    sidebarName: "Notifications",
+    navbarName: "Notifications",
+    icon: Notifications,
+    component: NotificationsPage
+  },
   {
  redirect: true, path: '/', to: '/dashboard', navbarName: 'Redirect' 
 }

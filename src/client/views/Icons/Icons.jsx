@@ -19,7 +19,7 @@ function Icons(props) {
       <GridItem xs={12} sm={12} md={12}>
         <Card plain>
           <CardHeader plain color="primary">
-            <h4 className={classes.cardTitleWhite}>Material Design Icons</h4>
+            <h4 className={classes.cardTitleWhite}>Material Design</h4>
             <p className={classes.cardCategoryWhite}>
               Handcrafted by our friends from{" "}
               <a
@@ -46,13 +46,38 @@ function Icons(props) {
                 <h5>
                   The icons are visible on Desktop mode inside an iframe. Since
                   the iframe is not working on Mobile and Tablets please visit
-                  the icons on their original page on Google. Check the
+                  the icons on their original page on Google. Check the 
                   <a
                     href="https://design.google.com/icons/"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
                     Material Icons
+                  </a>
+                </h5>
+              </GridItem>
+            </Hidden>
+            <Hidden only={["sm", "xs"]}>
+              <iframe
+                className={classes.iframe}
+                src="https://material-ui.com/demos/tables"
+                title="Material-ui Components"
+              >
+                <p>Your browser does not support iframes.</p>
+              </iframe>
+            </Hidden>
+            <Hidden only={["lg", "md"]}>
+              <GridItem xs={12} sm={12} md={6}>
+                <h5>
+                  The components are visible on Desktop mode inside an iframe. Since
+                  the iframe is not working on Mobile and Tablets please visit
+                  the icons on their original page on Google. Check the 
+                  <a
+                    href="https://material-ui.com/demos/tables"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Material-UI
                   </a>
                 </h5>
               </GridItem>

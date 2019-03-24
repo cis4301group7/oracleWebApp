@@ -30,7 +30,7 @@ const Sidebar = ({ ...props }) => {
         if (prop.redirect) return null;
         let activePro = ' ';
         let listItemClasses;
-        if (prop.path === '/upgrade-to-pro') {
+        if (prop.path === '/details') {
           activePro = `${classes.activePro} `;
           listItemClasses = classNames({
             [` ${ classes[color]}`]: true
