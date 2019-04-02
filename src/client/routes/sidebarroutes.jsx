@@ -11,6 +11,7 @@ import Survey from "@material-ui/icons/Assessment";
 import LibraryBooks from "@material-ui/icons/LibraryBooks";
 import Notifications from "@material-ui/icons/Notifications";
 import LocationOn from "@material-ui/icons/LocationOn";
+import RecentActors from "@material-ui/icons/RecentActors";
 // core components/views
 import DashboardPage from "../views/Dashboard/Dashboard.jsx";
 import UserProfile from "../views/UserProfile/UserProfile.jsx";
@@ -53,7 +54,7 @@ const dashboardRoutes = [
     path: '/teamstats',
     sidebarName: 'Teams',
     navbarName: 'Team Stats',
-    icon: Survey,
+    icon: RecentActors,
     component: TeamStats
   },
   {

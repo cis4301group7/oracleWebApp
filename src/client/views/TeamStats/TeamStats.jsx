@@ -64,7 +64,7 @@ class TeamStats extends React.Component {
                 </CardIcon>
                 <p className={classes.cardCategory}>Used Space</p>
                 <h3 className={classes.cardTitle}>
-                  49/50 <small>GB</small>
+                  48/50 <small>GB</small>
                 </h3>
               </CardHeader>
               <CardFooter stats>
@@ -271,6 +271,26 @@ class TeamStats extends React.Component {
                   ]}
                 />
               </CardBody>
+            </Card>
+          </GridItem>
+          <GridItem xs={12} sm={12} md={6}>
+          <CardHeader color="danger" stats icon>
+          Categories
+          </CardHeader>
+            <Card>
+              <CardBody>
+              +List of TeamStats
+              +Salary stats
+              +Attendance/Park stats
+              +Offensive Stats
+              +Misc States
+              +Postseason Series Stats
+              </CardBody>
+            </Card>
+          </GridItem>
+          <GridItem xs={12} sm={12} md={6}>
+            <Card>
+              SELECT * FROM RYBROOKS.DIVISION;
             </Card>
           </GridItem>
         </GridContainer>

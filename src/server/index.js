@@ -2,7 +2,9 @@ const express = require('express');
 const path = require('path');
 
 // var projectController = require('./projects.controller');
-var appDBController = require('./appDB.controller');
+// const appDBController = require('./appDB.controller');
+const detailsController = require('./controllers/getDetails');
+const totalCountController = require('./controllers/getTotalCount');
 
 const app = express();
 // const PORT = process.env.PORT || 8080;
@@ -11,6 +13,10 @@ const app = express();
 // app.get("/api/getAllCurrentProjects", projectController.getAllCurrentProjects);
 // app.get("/api/getAllArchivedProjects", projectController.getAllArchivedProjects);
 // app.get("/api/getSelectedProject", projectController.getSelectedProject);
+
+// app.get('/api/getAllData', appDBController.getAllData);
+app.get('/api/getDetails', detailsController.getDetails);
+app.get('/api/getTotalCount', totalCountController.getTotalCount);
 
 // app.post("/api/addProjectProposal", projectController.addProjectProposal);
 

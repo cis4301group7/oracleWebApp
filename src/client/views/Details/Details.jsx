@@ -46,9 +46,34 @@ import {
 import dashboardStyle from '../../assets/jss/material-dashboard-react/views/dashboardStyle.jsx';
 
 class Details extends React.Component {
-  state = {
-    value: 0
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      detailsList: [],
+      totalCountList: [],
+      // Filter must be integrated into
+      filterText: ''
+    };
+    this.filterUpdate = this.filterUpdate.bind(this);
+    this.initDetailsList();
+    this.initTotalCountList();
+  }
+
+  initDetailsList = () => {
+    fetch('/api/getDetails')
+      .then(results => results.json())
+      .then((data) => {
+        this.setState({ detailsList: data });
+      });
+  }
+
+  initTotalCountList = () => {
+    fetch('/api/getTotalCount')
+      .then(results => results.json())
+      .then((data) => {
+        this.setState({ totalCountList: data });
+      });
+  }
 
   handleChange = (event, value) => {
     this.setState({ value });
@@ -58,8 +83,41 @@ class Details extends React.Component {
     this.setState({ value: index });
   };
 
+  filterUpdate(value) {
+    this.setState({ filterText: value });
+  }
+
   render() {
     const { classes } = this.props;
+
+    const divList = this.state.detailsList.map((data, index) => (
+      <ul>
+        <li key={index.DIVISIONID}>
+          {data.DIVISIONID} - {data.DIVISIONNAME} - {data.CONFERENCEID}
+        </li>
+      </ul>
+    ));
+
+    const divTable = this.state.detailsList.map((data, index) => (
+      <table>
+        <tbody>
+          <tr key={index.DIVISIONID}>
+            <td>{data.DIVISIONID}</td>
+            <td>{data.DIVISIONNAME}</td>
+            <td>{data.CONFERENCEID}</td>
+          </tr>
+        </tbody>
+      </table>
+    ));
+
+    const countVar = this.state.totalCountList.map((data, index) => (
+      [data.FISH]
+    ));
+
+    const realTable = this.state.detailsList.map((data, index) => (
+      [data.DIVISIONID, data.DIVISIONNAME, data.CONFERENCEID]
+    ));
+
     return (
       <div>
         <GridContainer>
@@ -71,9 +129,9 @@ class Details extends React.Component {
                 </CardIcon>
                 <p className={classes.cardCategory}>Oracle DB</p>
                 <h3 className={classes.cardTitle}>
-                  49/50
+                  {countVar}
                   {' '}
-                  <small>GB</small>
+                  <font size="2">Records</font>
                 </h3>
               </CardHeader>
               <CardFooter stats>
@@ -86,205 +144,51 @@ class Details extends React.Component {
               </CardFooter>
             </Card>
           </GridItem>
-          {/* <GridItem xs={12} sm={6} md={3}>
-            <Card>
-              <CardHeader color="success" stats icon>
-                <CardIcon color="success">
-                  <Store />
-                </CardIcon>
-                <p className={classes.cardCategory}>Revenue</p>
-                <h3 className={classes.cardTitle}>$34,245</h3>
-              </CardHeader>
-              <CardFooter stats>
-                <div className={classes.stats}>
-                  <DateRange />
-                  Last 24 Hours
-                </div>
-              </CardFooter>
-            </Card>
-          </GridItem>
-          <GridItem xs={12} sm={6} md={3}>
-            <Card>
-              <CardHeader color="danger" stats icon>
-                <CardIcon color="danger">
-                  <Icon>info_outline</Icon>
-                </CardIcon>
-                <p className={classes.cardCategory}>Fixed Issues</p>
-                <h3 className={classes.cardTitle}>75</h3>
-              </CardHeader>
-              <CardFooter stats>
-                <div className={classes.stats}>
-                  <LocalOffer />
-                  Tracked from Github
-                </div>
-              </CardFooter>
-            </Card>
-          </GridItem>
-          <GridItem xs={12} sm={6} md={3}>
-            <Card>
-              <CardHeader color="info" stats icon>
-                <CardIcon color="info">
-                  <Accessibility />
-                </CardIcon>
-                <p className={classes.cardCategory}>Followers</p>
-                <h3 className={classes.cardTitle}>+245</h3>
-              </CardHeader>
-              <CardFooter stats>
-                <div className={classes.stats}>
-                  <Update />
-                  Just Updated
-                </div>
-              </CardFooter>
-            </Card>
-          </GridItem> */}
         </GridContainer>
         <GridContainer>
-          <GridItem xs={12} sm={12} md={4}>
-            <Card chart>
+          <GridItem xs={12} sm={12} md={6}>
+            <Card>
               <CardHeader color="success">
-                <ChartistGraph
-                  className="ct-chart"
-                  data={dailySalesChart.data}
-                  type="Line"
-                  options={dailySalesChart.options}
-                  listener={dailySalesChart.animation}
-                />
+                <h4 className={classes.cardTitleWhite}>RYBROOKS.DIVISION</h4>
+                <p className={classes.cardCategoryWhite}>
+                  SELECT * FROM RYBROOKS.DIVISION;
+                </p>
               </CardHeader>
               <CardBody>
-                <h4 className={classes.cardTitle}>Daily Sales</h4>
-                <p className={classes.cardCategory}>
-                  <span className={classes.successText}>
-                    <ArrowUpward className={classes.upArrowCardCategory} />
-                    {' '}
-55%
-                  </span>
-                  {' '}
-                  increase in today sales.
-                </p>
+                {divTable}
               </CardBody>
-              <CardFooter chart>
-                <div className={classes.stats}>
-                  <AccessTime />
-                  {' '}
-updated 4 minutes ago
-                </div>
-              </CardFooter>
-            </Card>
-          </GridItem>
-          <GridItem xs={12} sm={12} md={4}>
-            <Card chart>
-              <CardHeader color="warning">
-                <ChartistGraph
-                  className="ct-chart"
-                  data={emailsSubscriptionChart.data}
-                  type="Bar"
-                  options={emailsSubscriptionChart.options}
-                  responsiveOptions={emailsSubscriptionChart.responsiveOptions}
-                  listener={emailsSubscriptionChart.animation}
-                />
-              </CardHeader>
-              <CardBody>
-                <h4 className={classes.cardTitle}>Email Subscriptions</h4>
-                <p className={classes.cardCategory}>
-                  Last Campaign Performance
-                </p>
-              </CardBody>
-              <CardFooter chart>
-                <div className={classes.stats}>
-                  <AccessTime />
-                  {' '}
-campaign sent 2 days ago
-                </div>
-              </CardFooter>
-            </Card>
-          </GridItem>
-          <GridItem xs={12} sm={12} md={4}>
-            <Card chart>
-              <CardHeader color="danger">
-                <ChartistGraph
-                  className="ct-chart"
-                  data={completedTasksChart.data}
-                  type="Line"
-                  options={completedTasksChart.options}
-                  listener={completedTasksChart.animation}
-                />
-              </CardHeader>
-              <CardBody>
-                <h4 className={classes.cardTitle}>Completed Tasks</h4>
-                <p className={classes.cardCategory}>
-                  Last Campaign Performance
-                </p>
-              </CardBody>
-              <CardFooter chart>
-                <div className={classes.stats}>
-                  <AccessTime />
-                  {' '}
-campaign sent 2 days ago
-                </div>
-              </CardFooter>
             </Card>
           </GridItem>
         </GridContainer>
         <GridContainer>
           <GridItem xs={12} sm={12} md={6}>
-            <CustomTabs
-              title="Tasks:"
-              headerColor="primary"
-              tabs={[
-                {
-                  tabName: 'Bugs',
-                  tabIcon: BugReport,
-                  tabContent: (
-                    <Tasks
-                      checkedIndexes={[0, 3]}
-                      tasksIndexes={[0, 1, 2, 3]}
-                      tasks={bugs}
-                    />
-                  )
-                },
-                {
-                  tabName: 'Website',
-                  tabIcon: Code,
-                  tabContent: (
-                    <Tasks
-                      checkedIndexes={[0]}
-                      tasksIndexes={[0, 1]}
-                      tasks={website}
-                    />
-                  )
-                },
-                {
-                  tabName: 'Server',
-                  tabIcon: Cloud,
-                  tabContent: (
-                    <Tasks
-                      checkedIndexes={[1]}
-                      tasksIndexes={[0, 1, 2]}
-                      tasks={server}
-                    />
-                  )
-                }
-              ]}
-            />
+            <Card>
+              <CardHeader color="success">
+                <h4 className={classes.cardTitleWhite}>RYBROOKS.DIVISION</h4>
+                <p className={classes.cardCategoryWhite}>
+                  SELECT * FROM RYBROOKS.DIVISION;
+                </p>
+              </CardHeader>
+              <CardBody>
+                {divList}
+              </CardBody>
+            </Card>
           </GridItem>
+        </GridContainer>
+        <GridContainer>
           <GridItem xs={12} sm={12} md={6}>
             <Card>
-              <CardHeader color="warning">
-                <h4 className={classes.cardTitleWhite}>Employees Stats</h4>
+              <CardHeader color="success">
+                <h4 className={classes.cardTitleWhite}>RYBROOKS.DIVISION</h4>
                 <p className={classes.cardCategoryWhite}>
-                  New employees on 15th September, 2016
+                  SELECT * FROM RYBROOKS.DIVISION;
                 </p>
               </CardHeader>
               <CardBody>
                 <Table
-                  tableHeaderColor="warning"
-                  tableHead={['ID', 'Name', 'Salary', 'Country']}
-                  tableData={[
-                    ['1', 'Dakota Rice', '$36,738', 'Niger'],
-                    ['2', 'Minerva Hooper', '$23,789', 'Curaçao'],
-                    ['3', 'Sage Rodriguez', '$56,142', 'Netherlands'],
-                    ['4', 'Philip Chaney', '$38,735', 'Korea, South']
-                  ]}
+                  tableHeaderColor="success"
+                  tableHead={['DIVISIONID', 'DIVISIONNAME', 'CONFERENCEID']}
+                  tableData={realTable}
                 />
               </CardBody>
             </Card>
