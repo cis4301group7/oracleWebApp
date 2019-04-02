@@ -286,6 +286,6 @@ See License [ISC License](https://github.com/namingVariablesIsHard/webappsUFClie
 React Boilerplate [simple-react-full-stack](https://github.com/crsandeep/simple-react-full-stack).
 
 
-### Edited by Cameran 11/5/18
+### Lulu Melhem - Test Commit 03/26/2019
 
-### Edited by Lulu Melhem 03/26/2019
+### Ryan Brooks - Test Commit 04/02/2019
