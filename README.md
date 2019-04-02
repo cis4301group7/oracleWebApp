@@ -287,3 +287,5 @@ React Boilerplate [simple-react-full-stack](https://github.com/crsandeep/simple-
 
 
 ### Edited by Cameran 11/5/18
+
+### Edited by Lulu Melhem 03/26/2019
