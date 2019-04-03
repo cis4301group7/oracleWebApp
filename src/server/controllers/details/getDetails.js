@@ -24,7 +24,7 @@
 // module.exports.getDetails = getDetails;
 
 const oracledb = require('oracledb');
-const dbConfig = require('../config/config');
+const dbConfig = require('../../config/config');
 
 // function getDetails(empId) {
 //   oracledb.createPool({

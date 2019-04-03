@@ -1,5 +1,5 @@
 const oracledb = require('oracledb');
-const dbConfig = require('../config/config');
+const dbConfig = require('../../config/config');
 
 exports.getTotalCount = async function (req, res) {
   oracledb.getConnection(
