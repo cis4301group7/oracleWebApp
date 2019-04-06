@@ -3,8 +3,8 @@ const path = require('path');
 
 // var projectController = require('./projects.controller');
 // const appDBController = require('./appDB.controller');
-const detailsController = require('./controllers/getDetails');
-const totalCountController = require('./controllers/getTotalCount');
+const detailsController = require('./controllers/details/getDetails');
+const totalCountController = require('./controllers/details/getTotalCount');
 
 const app = express();
 // const PORT = process.env.PORT || 8080;
