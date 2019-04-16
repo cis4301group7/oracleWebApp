@@ -4,6 +4,12 @@ import Person from "@material-ui/icons/Person";
 // import ContentPaste from "@material-ui/icons/ContentPaste";
 import BubbleChart from '@material-ui/icons/BubbleChart';
 import Book from "@material-ui/icons/Book";
+import People from "@material-ui/icons/People";
+import PinDrop from "@material-ui/icons/PinDrop";
+import WC from "@material-ui/icons/WC";
+import Contacts from "@material-ui/icons/Contacts";
+import SupervisorAccount from "@material-ui/icons/SupervisorAccount";
+import School from "@material-ui/icons/School";
 import Propose from "@material-ui/icons/NoteAdd";
 import Find from "@material-ui/icons/FindInPage";
 import PastProj from "@material-ui/icons/ViewCarousel";
@@ -43,25 +49,25 @@ const dashboardRoutes = [
     icon: Dashboard,
     component: DashboardPage
   },
-  {
-    path: "/ogdashboard",
-    sidebarName: "OG Dashboard",
-    navbarName: "OG Dashboard",
-    icon: Dashboard,
-    component: OGDashboardPage
-  },
+  // {
+  //   path: "/ogdashboard",
+  //   sidebarName: "OG Dashboard",
+  //   navbarName: "OG Dashboard",
+  //   icon: Dashboard,
+  //   component: OGDashboardPage
+  // },
   {
     path: '/teamstats',
     sidebarName: 'Teams',
     navbarName: 'Team Stats',
-    icon: RecentActors,
+    icon: People,
     component: TeamStats
   },
   {
     path: '/positionstats',
     sidebarName: 'Positions',
     navbarName: 'Position Stats',
-    icon: Survey,
+    icon: PinDrop,
     component: PositionStats
   },
   {
@@ -75,28 +81,28 @@ const dashboardRoutes = [
     path: '/aggregateplayerstats',
     sidebarName: 'Aggregate Players',
     navbarName: 'Aggregate Player Stats',
-    icon: Survey,
+    icon: WC,
     component: AggregatePlayerStats
   },
   {
     path: '/managerstats',
     sidebarName: 'Managers',
     navbarName: 'Manager Stats',
-    icon: Survey,
+    icon: Contacts,
     component: ManagerStats
   },
   {
     path: '/aggregatemanagerstats',
     sidebarName: 'Aggregate Managers',
     navbarName: 'Aggregate Manager Stats',
-    icon: Survey,
+    icon: SupervisorAccount,
     component: AggregateManagerStats
   },
   {
     path: '/honorsawards',
     sidebarName: 'Honors',
     navbarName: 'Awards & Honors',
-    icon: Survey,
+    icon: School,
     component: HonorsAwards
   },
   {
@@ -169,13 +175,13 @@ const dashboardRoutes = [
     icon: BubbleChart,
     component: Icons
   },
-  {
-    path: "/maps",
-    sidebarName: "Maps",
-    navbarName: "Map",
-    icon: LocationOn,
-    component: Maps
-  },
+  // {
+  //   path: "/maps",
+  //   sidebarName: "Maps",
+  //   navbarName: "Map",
+  //   icon: LocationOn,
+  //   component: Maps
+  // },
   {
     path: "/notifications",
     sidebarName: "Notifications",
