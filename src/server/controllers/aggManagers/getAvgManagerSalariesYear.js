@@ -1,7 +1,7 @@
 const oracledb = require('oracledb');
 const dbConfig = require('../../config/config');
 
-exports.getPostseasonRBIs = async function (req, res) {
+exports.getAvgManagerSalariesYear = async function (req, res) {
   oracledb.getConnection(
     {
       user: dbConfig.user,
@@ -21,9 +21,13 @@ exports.getPostseasonRBIs = async function (req, res) {
       }
 
       connection.execute(
-        'SELECT YEAR, COUNT(RBI) AS RBI FROM RYBROOKS.POSTSEASONBATTINGSTATS  \
-        WHERE YEAR > 1962 \
-        GROUP BY YEAR ORDER BY YEAR ASC', {}, {
+        'SELECT RYBROOKS.MANAGERS.YEAR AS YEAR, Cast(AVG(SALARY)as Int) AS SALARY \
+        FROM RYBROOKS.PLAYERS \
+        INNER JOIN RYBROOKS.SALARIES \
+        ON RYBROOKS.PLAYERS.PLAYERID = RYBROOKS.SALARIES.PLAYERID \
+        INNER JOIN RYBROOKS.MANAGERS \
+        ON RYBROOKS.SALARIES.PLAYERID = RYBROOKS.MANAGERS.PLAYERID \
+        GROUP BY RYBROOKS.MANAGERS.YEAR ORDER BY RYBROOKS.MANAGERS.YEAR ASC', {}, {
           outFormat: oracledb.OBJECT // Return the result as Object
         }, (err, result) => {
           if (err) {
@@ -43,7 +47,7 @@ exports.getPostseasonRBIs = async function (req, res) {
               if (err) {
                 console.error(err.message);
               } else {
-                console.log('GET /PostseasonRBIs : Connection released');
+                console.log('GET /AvgManagerSalariesYear : Connection released');
               }
             }
           );

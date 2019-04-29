@@ -1,7 +1,10 @@
+/* eslint-disable func-names */
 const oracledb = require('oracledb');
 const dbConfig = require('../../config/config');
 
-exports.getPostseasonRBIs = async function (req, res) {
+exports.postSpecificManagerYear = async function (req, res) {
+  const bin = req.query.year;
+
   oracledb.getConnection(
     {
       user: dbConfig.user,
@@ -21,9 +24,7 @@ exports.getPostseasonRBIs = async function (req, res) {
       }
 
       connection.execute(
-        'SELECT YEAR, COUNT(RBI) AS RBI FROM RYBROOKS.POSTSEASONBATTINGSTATS  \
-        WHERE YEAR > 1962 \
-        GROUP BY YEAR ORDER BY YEAR ASC', {}, {
+        'SELECT PLAYERID AS MANAGERS FROM RYBROOKS.MANAGERS WHERE YEAR = :year', { year: bin }, {
           outFormat: oracledb.OBJECT // Return the result as Object
         }, (err, result) => {
           if (err) {
@@ -36,6 +37,7 @@ exports.getPostseasonRBIs = async function (req, res) {
           } else {
             res.contentType('application/json').status(200);
             res.send(JSON.stringify(result.rows));
+            // console.log(result.rows);
           }
           // Release the connection
           connection.release(
@@ -43,12 +45,12 @@ exports.getPostseasonRBIs = async function (req, res) {
               if (err) {
                 console.error(err.message);
               } else {
-                console.log('GET /PostseasonRBIs : Connection released');
+                console.log('POST /SpecificManagerYear : Connection released');
               }
             }
           );
         }
-);
+      );
     }
   );
 };

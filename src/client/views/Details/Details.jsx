@@ -134,7 +134,7 @@ class Details extends React.Component {
       open: false
     };
     this.filterUpdate = this.filterUpdate.bind(this);
-    this.initDetailsList();
+    // this.initDetailsList();
     this.initTotalCountList();
   }
 

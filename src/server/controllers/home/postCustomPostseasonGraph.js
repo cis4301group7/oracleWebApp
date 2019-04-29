@@ -1,7 +1,11 @@
+/* eslint-disable func-names */
 const oracledb = require('oracledb');
 const dbConfig = require('../../config/config');
 
-exports.getPostseasonRBIs = async function (req, res) {
+exports.postCustomPostseasonGraph = async function (req, res) {
+  // const bin = req.query.year;
+  const bin = req.query.agg;
+
   oracledb.getConnection(
     {
       user: dbConfig.user,
@@ -21,9 +25,15 @@ exports.getPostseasonRBIs = async function (req, res) {
       }
 
       connection.execute(
-        'SELECT YEAR, COUNT(RBI) AS RBI FROM RYBROOKS.POSTSEASONBATTINGSTATS  \
-        WHERE YEAR > 1962 \
-        GROUP BY YEAR ORDER BY YEAR ASC', {}, {
+        'SELECT RYBROOKS.POSTSEASONBATTINGSTATS.YEAR AS YEAR, AVG(RYBROOKS.POSTSEASONBATTINGSTATS.H) AS XD \
+          FROM RYBROOKS.POSTSEASONBATTINGSTATS \
+          INNER JOIN RYBROOKS.POSTSEASONFIELDINGSTATS \
+          ON RYBROOKS.POSTSEASONBATTINGSTATS.TEAMID = RYBROOKS.POSTSEASONFIELDINGSTATS.TEAMID \
+          INNER JOIN RYBROOKS.POSTSEASONPITCHINGSTATS \
+          ON RYBROOKS.POSTSEASONFIELDINGSTATS.TEAMID = RYBROOKS.POSTSEASONPITCHINGSTATS.TEAMID \
+          WHERE RYBROOKS.POSTSEASONBATTINGSTATS.TEAMID  = :agg \
+          GROUP BY RYBROOKS.POSTSEASONBATTINGSTATS.YEAR \
+          ORDER BY YEAR ASC', { agg: bin }, {
           outFormat: oracledb.OBJECT // Return the result as Object
         }, (err, result) => {
           if (err) {
@@ -36,6 +46,7 @@ exports.getPostseasonRBIs = async function (req, res) {
           } else {
             res.contentType('application/json').status(200);
             res.send(JSON.stringify(result.rows));
+            // console.log(result.rows);
           }
           // Release the connection
           connection.release(
@@ -43,12 +54,12 @@ exports.getPostseasonRBIs = async function (req, res) {
               if (err) {
                 console.error(err.message);
               } else {
-                console.log('GET /PostseasonRBIs : Connection released');
+                console.log('POST /CustomPostseasonGraph : Connection released');
               }
             }
           );
         }
-);
+      );
     }
   );
 };

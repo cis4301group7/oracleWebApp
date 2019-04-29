@@ -27,6 +27,8 @@ import FindInPage from '@material-ui/icons/FindInPage';
 import SentimentSatisfiedAlt from '@material-ui/icons/SentimentSatisfiedAlt';
 // core components
 import Paper from '@material-ui/core/Paper';
+import MenuItem from '@material-ui/core/MenuItem';
+import TextField from '@material-ui/core/TextField';
 import CardHeader1 from '@material-ui/core/CardHeader';
 import GridItem from '../../components/Grid/GridItem.jsx';
 import GridContainer from '../../components/Grid/GridContainer.jsx';
@@ -123,8 +125,42 @@ const styles = theme => ({
       fontWeight: '400',
       lineHeight: '1'
     }
-  }
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
+  },
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  dense: {
+    marginTop: 19,
+  },
+  menu: {
+    width: 200,
+  },
 });
+
+const aggOptions = [
+  {
+    value: 'AVG',
+    label: 'AVG',
+  },
+  {
+    value: 'MAX',
+    label: 'MAX',
+  },
+  {
+    value: 'MIN',
+    label: 'MIN',
+  },
+  {
+    value: 'SUM',
+    label: 'SUM',
+  },
+];
 
 class Dashboard extends React.Component {
   // state = {
@@ -152,11 +188,15 @@ class Dashboard extends React.Component {
       postseasonWinsTeamList: [],
       postseasonRBIsList: [],
       postseasonSuperstarsList: [],
+      customPostseasonStatsList: [],
+      customPostseasonGraphList: [],
       // Filter must be integrated into
       filterText: '',
       open: false
     };
     this.filterUpdate = this.filterUpdate.bind(this);
+    this.onSubmitCustomPostseasonStats = this.handleSubmitCustomPostseasonStats.bind(this);
+    this.onSubmitCustomPostseasonGraph = this.handleSubmitCustomPostseasonGraph.bind(this);
     // this.initDetailsList();
     // this.initTotalCountList();
     this.initUniquePlayerList();
@@ -272,9 +312,63 @@ class Dashboard extends React.Component {
     this.setState({ value });
   };
 
+  handleChangeList = name => event => {
+    this.setState({ [name]: event.target.value });
+  };
+
   handleChangeIndex = (index) => {
     this.setState({ value: index });
   };
+
+  handleSubmitCustomPostseasonGraph(e) {
+    const params = { agg: this.aggD.value };
+    const urlParams = new URLSearchParams(Object.entries(params));
+    e.preventDefault();
+    fetch('/api/postCustomPostseasonGraph?' + urlParams, {
+      method: 'POST',
+      // headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      // body: {
+      //   year: this.yearD.value
+      // }
+      // data: {
+      //   year: this.yearD.value
+      // }
+    })
+      // .then(function(response) {
+      //   return response.json()
+      // }).then(function(body) {
+      //   console.log(body);
+      // });
+      .then(results => results.json())
+      .then((data) => {
+        this.setState({ customPostseasonGraphList: data });
+      });
+  }
+
+  handleSubmitCustomPostseasonStats(e) {
+    const params = { year: this.yearD.value };
+    const urlParams = new URLSearchParams(Object.entries(params));
+    e.preventDefault();
+    fetch('/api/postCustomPostseasonStats?' + urlParams, {
+      method: 'POST',
+      // headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      // body: {
+      //   year: this.yearD.value
+      // }
+      // data: {
+      //   year: this.yearD.value
+      // }
+    })
+      // .then(function(response) {
+      //   return response.json()
+      // }).then(function(body) {
+      //   console.log(body);
+      // });
+      .then(results => results.json())
+      .then((data) => {
+        this.setState({ customPostseasonStatsList: data });
+      });
+  }
 
   filterUpdate(value) {
     this.setState({ filterText: value });
@@ -282,6 +376,18 @@ class Dashboard extends React.Component {
 
   render() {
     const { classes } = this.props;
+
+    const customPostseasonGraph = this.state.customPostseasonGraphList.map((data, index) => (
+      (data.XD)
+    ));
+
+    const customPostseasonGraphLabel = this.state.customPostseasonGraphList.map((data, index) => (
+      [data.YEAR]
+    ));
+
+    const customPostseasonStats = this.state.customPostseasonStatsList.map((data, index) => (
+      [data.MANAGERS]
+    ));
 
     const countPlayer = this.state.uniquePlayerList.map((data, index) => (
       [data.PLAYERS]
@@ -359,6 +465,57 @@ class Dashboard extends React.Component {
         }),
         low: 750,
         high: 1500, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+        chartPadding: {
+          top: 12,
+          right: 0,
+          bottom: 0,
+          left: 0
+        }
+      },
+      // for animation
+      animation: {
+        draw: function(data) {
+          if (data.type === "line" || data.type === "area") {
+            data.element.animate({
+              d: {
+                begin: 600,
+                dur: 700,
+                from: data.path
+                  .clone()
+                  .scale(1, 0)
+                  .translate(0, data.chartRect.height())
+                  .stringify(),
+                to: data.path.clone().stringify(),
+                easing: Chartist.Svg.Easing.easeOutQuint
+              }
+            });
+          } else if (data.type === "point") {
+            data.element.animate({
+              opacity: {
+                begin: (data.index + 1) * delays,
+                dur: durations,
+                from: 0,
+                to: 1,
+                easing: "ease"
+              }
+            });
+          }
+        }
+      }
+    };
+
+    const custGraphPostseason = {
+      data: {
+        labels: customPostseasonGraphLabel,
+        // series: [[12, 17, 7, 177, 23, 18, 38]]
+        series: [customPostseasonGraph]
+      },
+      options: {
+        lineSmooth: Chartist.Interpolation.cardinal({
+          tension: 0
+        }),
+        low: 0,
+        high: 15, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
         chartPadding: {
           top: 12,
           right: 0,
@@ -599,7 +756,7 @@ class Dashboard extends React.Component {
     return (
       <div>
         <GridContainer>
-          <GridItem xs={8} sm={8} md={8}>
+          <GridItem xs={4} sm={4} md={4}>
             <Card>
               <CardHeader color="info" stats icon>
                 <CardIcon color="info">
@@ -608,12 +765,12 @@ class Dashboard extends React.Component {
                 <p className={classes.cardCategory}>Major League Baseball</p>
                 <h3 className={classes.cardTitle}>Statistics Database</h3>
               </CardHeader>
-              {/* <CardFooter stats>
+              <CardFooter stats>
                 <div className={classes.stats}>
                   <Create />
-                  <a href="user"> Change your avatar</a>
+                  {' '} A resource for derived statistics representing many aspects of Major League Baseball
                 </div>
-              </CardFooter> */}
+              </CardFooter>
             </Card>
           </GridItem>
         </GridContainer>
@@ -645,7 +802,7 @@ class Dashboard extends React.Component {
               </CardHeader>
               <CardFooter stats>
                 <div className={classes.stats}>
-                  Total of max games in a season since 1968
+                  Sum of max games in each season since 1968
                 </div>
               </CardFooter>
             </Card>
@@ -711,6 +868,124 @@ class Dashboard extends React.Component {
               </CardFooter> */}
             </Card>
           </GridItem>
+          <GridItem xs={12} sm={12} md={12}>
+            <Card chart>
+              <CardHeader color="warning">
+                <ChartistGraph
+                  className="ct-chart"
+                  data={custGraphPostseason.data}
+                  type="Line"
+                  options={custGraphPostseason.options}
+                  listener={custGraphPostseason.animation}
+                />
+              </CardHeader>
+              <CardBody>
+                <h4 className={classes.cardTitle}>Custom Postseason</h4>
+                <p className={classes.cardCategory}>
+                  {/* <span className={classes.successText}>
+                    <ArrowUpward className={classes.upArrowCardCategory} />
+                  </span>{' '} */}
+                  Derived statistics chosen by user
+                </p>
+              </CardBody>
+              <CardFooter chart>
+                <form onSubmit={this.onSubmitCustomPostseasonGraph}>
+                  <input ref={(ref) => { this.aggD = ref; }} placeholder="Aggregate" type="text" name="agg" />
+                  <input type="Submit" />
+                </form>
+                <TextField
+                  id="standard-select-aggOptions"
+                  select
+                  label="Select"
+                  className={classes.textField}
+                  value={this.state.aggD}
+                  // onChange={this.handleChangeList('aggOptions')}
+                  onChange={this.onSubmitCustomPostseasonGraph}
+                  SelectProps={{
+                    MenuProps: {
+                      className: classes.menu,
+                    },
+                  }}
+                  // helperText="Please select an option"
+                  margin="normal"
+                >
+                  {aggOptions.map(option => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </CardFooter>
+            </Card>
+          </GridItem>
+        </GridContainer>
+        <GridContainer>
+          <GridItem xs={12} sm={12} md={12}>
+            <Card>
+              <CardHeader color="rose">
+                <CardHeader1
+                  classes={{
+                    title: classes.cardTitleWhite,
+                  }}
+                  action={(
+                    <div align="right">
+                      <IconButton color="primary" onClick={this.handleOpen}>
+                        <Code />
+                      </IconButton>
+                      <Modal
+                        aria-labelledby="simple-modal-title"
+                        aria-describedby="simple-modal-description"
+                        open={this.state.open}
+                        onClose={this.handleClose}
+                      >
+                        <div style={getModalStyle()} className={classes.paper}>
+                          <Typography variant="h4" id="modal-title">
+                            SQL
+                          </Typography>
+                          <CardBody>
+                            <Typography variant="subtitle4" id="simple-modal-description">
+                            SELECT YEAR, ROUND, x.TEAMNAME AS WINTEAM, y.TEAMNAME AS LOSETEAM 
+                            FROM RYBROOKS.POSTSEASONSERIES c 
+                            INNER JOIN RYBROOKS.TEAMS x 
+                            ON x.TEAMID = c.TEAMIDWINNER 
+                            INNER JOIN RYBROOKS.TEAMS y 
+                            ON y.TEAMID = c.TEAMIDLOSER 
+                            WHERE WINS >= 4 AND LOSSES = 0 AND ROUND = 'WS'
+                            ORDER BY YEAR ASC
+                            </Typography>
+                          </CardBody>
+                          <GridContainer>
+                            <a href="https://github.com/cis4301group7/oracleWebApp/blob/master/src/server/controllers/home/getPostseasonSuperstars.js" target="_blank" rel="noopener noreferrer">
+                              <Button color="primary">
+                                Source Code
+                              </Button>
+                            </a>
+                          </GridContainer>
+                        </div>
+                      </Modal>
+                    </div>
+                  )
+                  }
+                  title="Interesting Postseason"
+                  subheader="View derived statistics based on your selections"
+                />
+              </CardHeader>
+              <CardBody>
+                <form onSubmit={this.onSubmitCustomPostseasonStats}>
+                  <input ref={(ref) => { this.yearD = ref; }} placeholder="YEAR" type="text" name="year" />
+                  <input type="Submit" />
+                </form>
+                <Table
+                  tableHeaderColor="success"
+                  tableHead={['Year', 'Round', 'Winning Team', 'Losing Team']}
+                  // tableData={realTable}
+                  tableData={customPostseasonStats}
+                />
+              </CardBody>
+            </Card>
+          </GridItem>
+        </GridContainer>
+        <GridContainer>
           <GridItem xs={12} sm={12} md={6}>
             <Card chart>
               <CardHeader color="info">
@@ -736,7 +1011,7 @@ class Dashboard extends React.Component {
               </CardFooter> */}
             </Card>
           </GridItem>
-          <GridItem xs={12} sm={12} md={6}>
+          {/* <GridItem xs={12} sm={12} md={6}>
             <Card chart>
               <CardHeader color="warning">
                 <ChartistGraph
@@ -754,15 +1029,13 @@ class Dashboard extends React.Component {
                   Average manager salary paid by each team since 1962
                 </p>
               </CardBody>
-              {/* <CardFooter chart>
+              <CardFooter chart>
                 <div className={classes.stats}>
                   <AccessTime /> campaign sent 2 days ago
                 </div>
-              </CardFooter> */}
+              </CardFooter>
             </Card>
-          </GridItem>
-        </GridContainer>
-        <GridContainer>
+          </GridItem> */}
           <GridItem xs={12} sm={12} md={6}>
             <Card chart>
               <CardHeader color="primary">
@@ -788,7 +1061,9 @@ class Dashboard extends React.Component {
               </CardFooter> */}
             </Card>
           </GridItem>
-          <GridItem xs={12} sm={12} md={6}>
+        </GridContainer>
+        <GridContainer>
+          <GridItem xs={12} sm={12} md={12}>
             <Card chart>
               <CardHeader color="danger">
                 <ChartistGraph
@@ -802,7 +1077,7 @@ class Dashboard extends React.Component {
               <CardBody>
                 <h4 className={classes.cardTitle}>Postseason RBIs</h4>
                 <p className={classes.cardCategory}>
-                  RBIs in the Postseason since 1980
+                  RBIs in the Postseason since 1962
                 </p>
               </CardBody>
               {/* <CardFooter chart>
@@ -813,7 +1088,7 @@ class Dashboard extends React.Component {
             </Card>
           </GridItem>
         </GridContainer>
-        <GridContainer>
+        {/* <GridContainer>
           <GridItem xs={12} sm={12} md={12}>
             <Card>
               <CardHeader color="success">
@@ -874,7 +1149,7 @@ class Dashboard extends React.Component {
               </CardBody>
             </Card>
           </GridItem>
-        </GridContainer>
+        </GridContainer> */}
         {/* <GridContainer>
           <GridItem xs={12} sm={12} md={12}>
             <Card>

@@ -1,7 +1,7 @@
 const oracledb = require('oracledb');
 const dbConfig = require('../../config/config');
 
-exports.getPostseasonRBIs = async function (req, res) {
+exports.getUniqueMangers = async function (req, res) {
   oracledb.getConnection(
     {
       user: dbConfig.user,
@@ -21,9 +21,7 @@ exports.getPostseasonRBIs = async function (req, res) {
       }
 
       connection.execute(
-        'SELECT YEAR, COUNT(RBI) AS RBI FROM RYBROOKS.POSTSEASONBATTINGSTATS  \
-        WHERE YEAR > 1962 \
-        GROUP BY YEAR ORDER BY YEAR ASC', {}, {
+        'SELECT COUNT(DISTINCT PLAYERID) AS MANAGERS FROM RYBROOKS.MANAGERS', {}, {
           outFormat: oracledb.OBJECT // Return the result as Object
         }, (err, result) => {
           if (err) {
@@ -43,7 +41,7 @@ exports.getPostseasonRBIs = async function (req, res) {
               if (err) {
                 console.error(err.message);
               } else {
-                console.log('GET /PostseasonRBIs : Connection released');
+                console.log('GET /UniqueManagers : Connection released');
               }
             }
           );

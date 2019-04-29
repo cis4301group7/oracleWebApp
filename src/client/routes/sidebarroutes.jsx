@@ -57,11 +57,11 @@ const dashboardRoutes = [
   //   component: OGDashboardPage
   // },
   {
-    path: '/teamstats',
-    sidebarName: 'Teams',
-    navbarName: 'Team Stats',
-    icon: People,
-    component: TeamStats
+    path: '/aggregateplayerstats',
+    sidebarName: 'Players',
+    navbarName: 'Player Stats',
+    icon: Survey,
+    component: AggregatePlayerStats
   },
   {
     path: '/positionstats',
@@ -70,33 +70,34 @@ const dashboardRoutes = [
     icon: PinDrop,
     component: PositionStats
   },
-  {
-    path: '/individualstats',
-    sidebarName: 'Individuals',
-    navbarName: 'Individual Stats',
-    icon: Survey,
-    component: IndividualStats
-  },
-  {
-    path: '/aggregateplayerstats',
-    sidebarName: 'Aggregate Players',
-    navbarName: 'Aggregate Player Stats',
-    icon: WC,
-    component: AggregatePlayerStats
-  },
-  {
-    path: '/managerstats',
-    sidebarName: 'Managers',
-    navbarName: 'Manager Stats',
-    icon: Contacts,
-    component: ManagerStats
-  },
+  // {
+  //   path: '/individualstats',
+  //   sidebarName: 'Individuals',
+  //   navbarName: 'Individual Stats',
+  //   icon: Survey,
+  //   component: IndividualStats
+  // },
+
+  // {
+  //   path: '/managerstats',
+  //   sidebarName: 'Managers',
+  //   navbarName: 'Manager Stats',
+  //   icon: Contacts,
+  //   component: ManagerStats
+  // },
   {
     path: '/aggregatemanagerstats',
-    sidebarName: 'Aggregate Managers',
-    navbarName: 'Aggregate Manager Stats',
+    sidebarName: 'Managers',
+    navbarName: 'Manager Stats',
     icon: SupervisorAccount,
     component: AggregateManagerStats
+  },
+  {
+    path: '/teamstats',
+    sidebarName: 'Teams',
+    navbarName: 'Team Stats',
+    icon: WC,
+    component: TeamStats
   },
   {
     path: '/honorsawards',
@@ -161,20 +162,20 @@ const dashboardRoutes = [
   //   icon: "content_paste",
   //   component: TableList
   // },
-  {
-    path: "/typography",
-    sidebarName: "Typography",
-    navbarName: "Typography",
-    icon: LibraryBooks,
-    component: Typography
-  },
-  {
-    path: '/icons',
-    sidebarName: 'Icons',
-    navbarName: 'Icons',
-    icon: BubbleChart,
-    component: Icons
-  },
+  // {
+  //   path: "/typography",
+  //   sidebarName: "Typography",
+  //   navbarName: "Typography",
+  //   icon: LibraryBooks,
+  //   component: Typography
+  // },
+  // {
+  //   path: '/icons',
+  //   sidebarName: 'Icons',
+  //   navbarName: 'Icons',
+  //   icon: BubbleChart,
+  //   component: Icons
+  // },
   // {
   //   path: "/maps",
   //   sidebarName: "Maps",
@@ -182,13 +183,13 @@ const dashboardRoutes = [
   //   icon: LocationOn,
   //   component: Maps
   // },
-  {
-    path: "/notifications",
-    sidebarName: "Notifications",
-    navbarName: "Notifications",
-    icon: Notifications,
-    component: NotificationsPage
-  },
+  // {
+  //   path: "/notifications",
+  //   sidebarName: "Notifications",
+  //   navbarName: "Notifications",
+  //   icon: Notifications,
+  //   component: NotificationsPage
+  // },
   { redirect: true, path: "/", to: "/dashboard", navbarName: "Redirect" }
 ];
 
