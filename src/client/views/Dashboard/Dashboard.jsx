@@ -13,7 +13,6 @@ import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import Modal from '@material-ui/core/Modal';
-import Button from '@material-ui/core/Button';
 // @material-ui/icons
 import Create from '@material-ui/icons/Create';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
@@ -38,7 +37,7 @@ import CardHeader from '../../components/Card/CardHeader.jsx';
 import CardIcon from '../../components/Card/CardIcon.jsx';
 import CardBody from '../../components/Card/CardBody.jsx';
 import CardFooter from '../../components/Card/CardFooter.jsx';
-
+import Button from '../../components/CustomButtons/Button.jsx';
 import { bugs, website, server } from '../../variables/general.jsx';
 
 import {
@@ -143,22 +142,142 @@ const styles = theme => ({
   },
 });
 
-const aggOptions = [
+const teamOptions = [
   {
-    value: 'AVG',
-    label: 'AVG',
+    value: 'ARI',
+    label: 'Arizona Diamondbacks',
   },
   {
-    value: 'MAX',
-    label: 'MAX',
+    value: 'ATL',
+    label: 'Atlanta Braves',
+  },
+  {
+    value: 'BAL',
+    label: 'Baltimore Orioles',
+  },
+  {
+    value: 'BOS',
+    label: 'Boston Red Sox',
+  },
+  {
+    value: 'CHA',
+    label: 'Chicago White Sox',
+  },
+  {
+    value: 'CHN',
+    label: 'Chicago Cubs',
+  },
+  {
+    value: 'CIN',
+    label: 'Cincinnati Reds',
+  },
+  {
+    value: 'CLE',
+    label: 'Cleveland Indians',
+  },
+  {
+    value: 'COL',
+    label: 'Colorado Rockies',
+  },
+  {
+    value: 'DET',
+    label: 'Detroit Tigers',
+  },
+  {
+    value: 'HOU',
+    label: 'Houston Astros',
+  },
+  {
+    value: 'KCA',
+    label: 'Kansas City Royals',
+  },
+  {
+    value: 'CAL',
+    label: 'LA Angels (older)',
+  },
+  {
+    value: 'ANA',
+    label: 'LA Angels (old)',
+  },
+  {
+    value: 'LAA',
+    label: 'LA Angels',
+  },
+  {
+    value: 'LAN',
+    label: 'LA Dodgers',
+  },
+  {
+    value: 'FLO',
+    label: 'Miami Marlins',
+  },
+  {
+    value: 'ML4',
+    label: 'Milwaukee Brewers (old)',
+  },
+  {
+    value: 'MIL',
+    label: 'Milwaukee Brewers',
   },
   {
     value: 'MIN',
-    label: 'MIN',
+    label: 'Minnesota Twins',
   },
   {
-    value: 'SUM',
-    label: 'SUM',
+    value: 'NYA',
+    label: 'NY Yankees',
+  },
+  {
+    value: 'NYN',
+    label: 'NY Mets',
+  },
+  {
+    value: 'OAK',
+    label: 'Oakland Athletics',
+  },
+  {
+    value: 'PHI',
+    label: 'Philadelphia Phillies',
+  },
+  {
+    value: 'PIT',
+    label: 'Pittsburgh Pirates',
+  },
+  {
+    value: 'SDN',
+    label: 'San Diego Padres',
+  },
+  {
+    value: 'SFN',
+    label: 'San Francisco Giants',
+  },
+  {
+    value: 'SEA',
+    label: 'Seattle Mariners',
+  },
+  {
+    value: 'SLN',
+    label: 'St Louis Cardinals',
+  },
+  {
+    value: 'TBA',
+    label: 'Tampa Bay Rays',
+  },
+  {
+    value: 'TEX',
+    label: 'Texas Rangers',
+  },
+  {
+    value: 'TOR',
+    label: 'Toronto Blue Jays',
+  },
+  {
+    value: 'MON',
+    label: 'Washington Nationals (old)',
+  },
+  {
+    value: 'WAS',
+    label: 'Washington Nationals',
   },
 ];
 
@@ -192,6 +311,8 @@ class Dashboard extends React.Component {
       customPostseasonGraphList: [],
       // Filter must be integrated into
       filterText: '',
+      teamInput: 'NYA',
+      teamInputWS: 'NYA',
       open: false
     };
     this.filterUpdate = this.filterUpdate.bind(this);
@@ -312,7 +433,11 @@ class Dashboard extends React.Component {
     this.setState({ value });
   };
 
-  handleChangeList = name => event => {
+  // handleChangeList = name => event => {
+  //   this.setState({ [name]: event.target.value });
+  // };
+
+  handleChangeList = name => event =>{
     this.setState({ [name]: event.target.value });
   };
 
@@ -320,8 +445,14 @@ class Dashboard extends React.Component {
     this.setState({ value: index });
   };
 
+  handleSubmitList = name => event => {
+    e.preventDefault();
+    this.handleSubmitCustomPostseasonGraph();
+  };
+
   handleSubmitCustomPostseasonGraph(e) {
-    const params = { agg: this.aggD.value };
+    // const params = { team: this.teamD.value };
+    const params = { team: this.state.teamInput };
     const urlParams = new URLSearchParams(Object.entries(params));
     e.preventDefault();
     fetch('/api/postCustomPostseasonGraph?' + urlParams, {
@@ -346,7 +477,8 @@ class Dashboard extends React.Component {
   }
 
   handleSubmitCustomPostseasonStats(e) {
-    const params = { year: this.yearD.value };
+    // const params = { year: this.yearD.value };
+    const params = { team: this.state.teamInputWS };
     const urlParams = new URLSearchParams(Object.entries(params));
     e.preventDefault();
     fetch('/api/postCustomPostseasonStats?' + urlParams, {
@@ -378,7 +510,7 @@ class Dashboard extends React.Component {
     const { classes } = this.props;
 
     const customPostseasonGraph = this.state.customPostseasonGraphList.map((data, index) => (
-      (data.XD)
+      (data.AGE)
     ));
 
     const customPostseasonGraphLabel = this.state.customPostseasonGraphList.map((data, index) => (
@@ -386,7 +518,7 @@ class Dashboard extends React.Component {
     ));
 
     const customPostseasonStats = this.state.customPostseasonStatsList.map((data, index) => (
-      [data.MANAGERS]
+      [data.YEAR, data.TEAMNAME, data.TOTALRUNS, data.TOTALHITS, data.TOTALDBS, data.TOTALTRIPS, data.TOTALHRS, data.TOTALABS]
     ));
 
     const countPlayer = this.state.uniquePlayerList.map((data, index) => (
@@ -514,8 +646,8 @@ class Dashboard extends React.Component {
         lineSmooth: Chartist.Interpolation.cardinal({
           tension: 0
         }),
-        low: 0,
-        high: 15, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+        low: 18,
+        high: 28, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
         chartPadding: {
           top: 12,
           right: 0,
@@ -880,41 +1012,57 @@ class Dashboard extends React.Component {
                 />
               </CardHeader>
               <CardBody>
-                <h4 className={classes.cardTitle}>Custom Postseason</h4>
+                <h4 className={classes.cardTitle}>Minimum Postseason Player Age</h4>
                 <p className={classes.cardCategory}>
                   {/* <span className={classes.successText}>
                     <ArrowUpward className={classes.upArrowCardCategory} />
                   </span>{' '} */}
-                  Derived statistics chosen by user
+                  Minimum age of a player who played in the postseason for a specific team each year since 1962
                 </p>
               </CardBody>
               <CardFooter chart>
-                <form onSubmit={this.onSubmitCustomPostseasonGraph}>
-                  <input ref={(ref) => { this.aggD = ref; }} placeholder="Aggregate" type="text" name="agg" />
+                {/* <form onSubmit={this.onSubmitCustomPostseasonGraph}>
+                  <input ref={(ref) => { this.teamD = ref; }} placeholder="Team" type="text" name="team" />
                   <input type="Submit" />
-                </form>
-                <TextField
-                  id="standard-select-aggOptions"
-                  select
-                  label="Select"
+                </form> */}
+                <form onSubmit={this.onSubmitCustomPostseasonGraph}>
+                {/* <TextField
+                  id="standard-name"
+                  label="Name"
                   className={classes.textField}
-                  value={this.state.aggD}
-                  // onChange={this.handleChangeList('aggOptions')}
-                  onChange={this.onSubmitCustomPostseasonGraph}
-                  SelectProps={{
-                    MenuProps: {
-                      className: classes.menu,
-                    },
-                  }}
-                  // helperText="Please select an option"
+                  value={this.state.name}
+                  onChange={this.handleChange('name')}
                   margin="normal"
-                >
-                  {aggOptions.map(option => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
+                /> */}
+                  <TextField
+                    id="teamD"
+                    select
+                    label="All possible teams"
+                    className={classes.textField}
+                    value={this.state.teamInput}
+                    // onChange={this.handleChangeList('teamOptions')}
+                    onChange={this.handleChangeList('teamInput')}
+                    ref={(ref) => { this.teamD = ref; }}
+                    // onChange={this.onSubmitCustomPostseasonGraph}
+                    SelectProps={{
+                      MenuProps: {
+                        className: classes.menu,
+                      },
+                    }}
+                    // helperText="Please select an option"
+                    margin="normal"
+                  >
+                    {teamOptions.map(option => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                  <Button color="primary" type="submit">
+                    Update
+                  </Button>
+                  {/* <input type="Submit" /> */}
+                </form>
               </CardFooter>
             </Card>
           </GridItem>
@@ -966,18 +1114,41 @@ class Dashboard extends React.Component {
                     </div>
                   )
                   }
-                  title="Interesting Postseason"
-                  subheader="View derived statistics based on your selections"
+                  title="Team Total Runs in World Series Ranked"
+                  subheader="Ranking the total runs scored for each team in the World Series"
                 />
               </CardHeader>
               <CardBody>
                 <form onSubmit={this.onSubmitCustomPostseasonStats}>
-                  <input ref={(ref) => { this.yearD = ref; }} placeholder="YEAR" type="text" name="year" />
-                  <input type="Submit" />
+                  <TextField
+                    id="teamPost"
+                    select
+                    label="All possible teams"
+                    className={classes.textField}
+                    value={this.state.teamInputWS}
+                    onChange={this.handleChangeList('teamInputWS')}
+                    ref={(ref) => { this.teamWS = ref; }}
+                    SelectProps={{
+                      MenuProps: {
+                        className: classes.menu,
+                      },
+                    }}
+                    // helperText="Please select an option"
+                    margin="normal"
+                  >
+                    {teamOptions.map(option => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                  <Button color="primary" type="submit">
+                    Update
+                  </Button>
                 </form>
                 <Table
                   tableHeaderColor="success"
-                  tableHead={['Year', 'Round', 'Winning Team', 'Losing Team']}
+                  tableHead={['Year', 'Team', 'Runs Scored', 'Hits', 'Doubles', 'Triples', 'Homeruns', 'At Bats']}
                   // tableData={realTable}
                   tableData={customPostseasonStats}
                 />

@@ -1,7 +1,7 @@
 const oracledb = require('oracledb');
 const dbConfig = require('../../config/config');
 
-exports.getLongTermManagers = async function (req, res) {
+exports.getSumWinsManagerTop = async function (req, res) {
   oracledb.getConnection(
     {
       user: dbConfig.user,
@@ -21,14 +21,22 @@ exports.getLongTermManagers = async function (req, res) {
       }
 
       connection.execute(
-        'SELECT YEAR, ROUND, x.TEAMNAME AS WINTEAM, y.TEAMNAME AS LOSETEAM \
-        FROM RYBROOKS.POSTSEASONSERIES c \
-        INNER JOIN RYBROOKS.TEAMS x \
-        ON x.TEAMID = c.TEAMIDWINNER \
-        INNER JOIN RYBROOKS.TEAMS y \
-        ON y.TEAMID = c.TEAMIDLOSER \
-        WHERE WINS >= 4 AND LOSSES = 0 AND ROUND = \'WS\' \
-        ORDER BY YEAR ASC', {}, {
+        'SELECT RYBROOKS.MANAGERS.PLAYERID AS PLAYERID, NAMEFIRST, NAMELAST, \
+          SUM(distinct(RYBROOKS.MANAGERS.W)) AS WINS, SUM(distinct(RYBROOKS.MANAGERS.L)) AS LOSSES, \
+          CAST(round(((SUM(W)/SUM(G))*100),2) as decimal(8,2)) AS WINPCT, \
+          COUNT(AWARDID) AS AWARDS \
+          FROM RYBROOKS.MANAGERS \
+          JOIN RYBROOKS.PLAYERS \
+          ON RYBROOKS.PLAYERS.PLAYERID = RYBROOKS.MANAGERS.PLAYERID \
+          JOIN RYBROOKS.MANAGERAWARDS \
+          ON RYBROOKS.PLAYERS.PLAYERID = RYBROOKS.MANAGERAWARDS.PLAYERID \
+          JOIN RYBROOKS.HALLOFFAME \
+          ON RYBROOKS.PLAYERS.PLAYERID = RYBROOKS.HALLOFFAME.PLAYERID \
+          JOIN RYBROOKS.TEAMS \
+          ON RYBROOKS.MANAGERS.TEAMID = RYBROOKS.TEAMS.TEAMID \
+          WHERE INDUCTED = \'Y\' \
+          GROUP BY RYBROOKS.MANAGERS.PLAYERID, NAMEFIRST, NAMELAST \
+          ORDER BY WINS DESC, AWARDS DESC, SUM(G) DESC', {}, {
           outFormat: oracledb.OBJECT // Return the result as Object
         }, (err, result) => {
           if (err) {
@@ -48,7 +56,7 @@ exports.getLongTermManagers = async function (req, res) {
               if (err) {
                 console.error(err.message);
               } else {
-                console.log('GET /LongTermManagers : Connection released');
+                console.log('GET /SumWinsManagerTop : Connection released');
               }
             }
           );

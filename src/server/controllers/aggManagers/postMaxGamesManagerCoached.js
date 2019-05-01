@@ -1,7 +1,10 @@
+/* eslint-disable func-names */
 const oracledb = require('oracledb');
 const dbConfig = require('../../config/config');
 
-exports.getMultipleManagersYear = async function (req, res) {
+exports.postMaxGamesManagerCoached = async function (req, res) {
+  const bin = req.query.team;
+
   oracledb.getConnection(
     {
       user: dbConfig.user,
@@ -21,14 +24,15 @@ exports.getMultipleManagersYear = async function (req, res) {
       }
 
       connection.execute(
-        'SELECT YEAR, ROUND, x.TEAMNAME AS WINTEAM, y.TEAMNAME AS LOSETEAM \
-        FROM RYBROOKS.POSTSEASONSERIES c \
-        INNER JOIN RYBROOKS.TEAMS x \
-        ON x.TEAMID = c.TEAMIDWINNER \
-        INNER JOIN RYBROOKS.TEAMS y \
-        ON y.TEAMID = c.TEAMIDLOSER \
-        WHERE WINS >= 4 AND LOSSES = 0 AND ROUND = \'WS\' \
-        ORDER BY YEAR ASC', {}, {
+        'SELECT RYBROOKS.MANAGERS.PLAYERID AS PLAYERID, NAMEFIRST, NAMELAST, SUM(G) AS TENURE, \
+          SUM(W) AS WINS, SUM(L) AS LOSSES, CAST(round(((SUM(W)/SUM(G))*100),2) as decimal(8,2)) AS WINPCT \
+          FROM RYBROOKS.MANAGERS \
+          INNER JOIN RYBROOKS.PLAYERS \
+          ON RYBROOKS.PLAYERS.PLAYERID = RYBROOKS.MANAGERS.PLAYERID \
+          WHERE TEAMID = :team \
+          GROUP BY RYBROOKS.MANAGERS.TEAMID, RYBROOKS.MANAGERS.PLAYERID, \
+          NAMEFIRST, NAMELAST \
+          ORDER BY SUM(G) DESC', { team: bin }, {
           outFormat: oracledb.OBJECT // Return the result as Object
         }, (err, result) => {
           if (err) {
@@ -41,6 +45,7 @@ exports.getMultipleManagersYear = async function (req, res) {
           } else {
             res.contentType('application/json').status(200);
             res.send(JSON.stringify(result.rows));
+            // console.log(result.rows);
           }
           // Release the connection
           connection.release(
@@ -48,12 +53,12 @@ exports.getMultipleManagersYear = async function (req, res) {
               if (err) {
                 console.error(err.message);
               } else {
-                console.log('GET /MultipleManagersYear : Connection released');
+                console.log('POST /MaxGamesManagerCoached : Connection released');
               }
             }
           );
         }
-);
+      );
     }
   );
 };
