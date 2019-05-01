@@ -1,7 +1,7 @@
 const oracledb = require('oracledb');
 const dbConfig = require('../../config/config');
 
-exports.getShortTermManagers = async function (req, res) {
+exports.getAvgManagerAgeYear = async function (req, res) {
   oracledb.getConnection(
     {
       user: dbConfig.user,
@@ -21,14 +21,14 @@ exports.getShortTermManagers = async function (req, res) {
       }
 
       connection.execute(
-        'SELECT YEAR, ROUND, x.TEAMNAME AS WINTEAM, y.TEAMNAME AS LOSETEAM \
-        FROM RYBROOKS.POSTSEASONSERIES c \
-        INNER JOIN RYBROOKS.TEAMS x \
-        ON x.TEAMID = c.TEAMIDWINNER \
-        INNER JOIN RYBROOKS.TEAMS y \
-        ON y.TEAMID = c.TEAMIDLOSER \
-        WHERE WINS >= 4 AND LOSSES = 0 AND ROUND = \'WS\' \
-        ORDER BY YEAR ASC', {}, {
+        'SELECT YEAR, Cast(MAX(AGE) as Int) AS MAGE FROM ( \
+          SELECT RYBROOKS.MANAGERS.YEAR, (YEAR-BIRTHYEAR) AS AGE \
+          FROM RYBROOKS.MANAGERS \
+          INNER JOIN RYBROOKS.PLAYERS \
+          ON RYBROOKS.MANAGERS.PLAYERID = RYBROOKS.PLAYERS.PLAYERID \
+          GROUP BY RYBROOKS.MANAGERS.YEAR, (YEAR-BIRTHYEAR) \
+          ORDER BY RYBROOKS.MANAGERS.YEAR ASC) \
+          GROUP BY YEAR ORDER BY YEAR ASC', {}, {
           outFormat: oracledb.OBJECT // Return the result as Object
         }, (err, result) => {
           if (err) {
@@ -48,7 +48,7 @@ exports.getShortTermManagers = async function (req, res) {
               if (err) {
                 console.error(err.message);
               } else {
-                console.log('GET /ShortTermManagers : Connection released');
+                console.log('GET /AvgManagerAgeYear : Connection released');
               }
             }
           );

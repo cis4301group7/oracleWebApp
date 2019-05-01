@@ -24,7 +24,21 @@ exports.postSpecificManagerYear = async function (req, res) {
       }
 
       connection.execute(
-        'SELECT PLAYERID AS MANAGERS FROM RYBROOKS.MANAGERS WHERE YEAR = :year', { year: bin }, {
+        'SELECT RYBROOKS.MANAGERS.PLAYERID AS PLAYERID, NAMEFIRST, NAMELAST, \
+          SUM(RYBROOKS.MANAGERS.W) AS WINS, SUM(RYBROOKS.MANAGERS.L) AS LOSSES, \
+          CAST(round(((SUM(RYBROOKS.MANAGERS.W)/SUM(RYBROOKS.MANAGERS.G))*100),2) as decimal(16,2)) AS WINPCT, \
+          RA, HA, WSWIN, LGWIN, DIVWIN, WCWIN \
+          FROM RYBROOKS.MANAGERS \
+          INNER JOIN RYBROOKS.PLAYERS \
+          ON RYBROOKS.PLAYERS.PLAYERID = RYBROOKS.MANAGERS.PLAYERID \
+          INNER JOIN RYBROOKS.TEAMSTATS \
+          ON RYBROOKS.TEAMSTATS.YEAR = RYBROOKS.MANAGERS.YEAR \
+          AND RYBROOKS.TEAMSTATS.TEAMID = RYBROOKS.MANAGERS.TEAMID \
+          WHERE RYBROOKS.MANAGERS.YEAR = :year \
+          GROUP BY RYBROOKS.MANAGERS.PLAYERID, \
+          NAMEFIRST, NAMELAST, RA, HA, WSWIN, LGWIN, DIVWIN, WCWIN \
+          ORDER BY WSWIN DESC, LGWIN DESC, DIVWIN DESC, \
+          WCWIN DESC, WINPCT DESC, RA ASC, HA ASC', { year: bin }, {
           outFormat: oracledb.OBJECT // Return the result as Object
         }, (err, result) => {
           if (err) {

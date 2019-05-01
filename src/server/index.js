@@ -14,20 +14,21 @@ const playerSalariesYearController = require('./controllers/home/getPlayerSalari
 const managerSalariesYearController = require('./controllers/home/getManagerSalariesYear');
 const postseasonWinsTeamController = require('./controllers/home/getPostseasonWinsTeam');
 const postseasonRBIsController = require('./controllers/home/getPostseasonRBIs');
-
-// Managers Page Controllers
+const postPostseasonGraphController = require('./controllers/home/postCustomPostseasonGraph');
+const postPostseasonStatsController = require('./controllers/home/postCustomPostseasonStats');
 const postseasonSuperstarsController = require('./controllers/home/getPostseasonSuperstars');
+// Managers Page Controllers
 const avgManagerSalariesTeamController = require('./controllers/aggManagers/getAvgManagerSalariesTeam');
 const avgManagerSalariesYearController = require('./controllers/aggManagers/getAvgManagerSalariesYear');
-const longTermManagersController = require('./controllers/aggManagers/getLongTermManagers');
-const multipleManagersYearController = require('./controllers/aggManagers/getMultipleManagersYear');
-const shortTermManagersController = require('./controllers/aggManagers/getShortTermManagers');
+const avgManagerAgeYearController = require('./controllers/aggManagers/getAvgManagerAgeYear');
+const sumWinsManagerTopController = require('./controllers/aggManagers/getSumWinsManagerTop');
+const avgLengthTeamKeepsManagerController = require('./controllers/aggManagers/getAvgLengthTeamKeepsManager');
 const uniqueManagersController = require('./controllers/aggManagers/getUniqueManagers');
 const managerWasPlayerController = require('./controllers/aggManagers/getManagerWasPlayer');
 const honoredManagersTotalController = require('./controllers/aggManagers/getHonoredManagersTotal');
 const specificManagerYearController = require('./controllers/aggManagers/postSpecificManagerYear');
-const postPostseasonGraphController = require('./controllers/home/postCustomPostseasonGraph');
-const postPostseasonStatsController = require('./controllers/home/postCustomPostseasonStats');
+const maxGamesManagerCoachedController = require('./controllers/aggManagers/postMaxGamesManagerCoached');
+const sumDifferentManagersPerTeamController = require('./controllers/aggManagers/getSumDifferentManagersPerTeam');
 
 const app = express();
 
@@ -51,13 +52,15 @@ app.post('/api/postCustomPostseasonStats', postPostseasonStatsController.postCus
 // Managers
 app.get('/api/getAvgManagerSalariesTeam', avgManagerSalariesTeamController.getAvgManagerSalariesTeam);
 app.get('/api/getAvgManagerSalariesYear', avgManagerSalariesYearController.getAvgManagerSalariesYear);
-app.get('/api/getLongTermManagers', longTermManagersController.getLongTermManagers);
-app.get('/api/getMultipleManagersYear', multipleManagersYearController.getMultipleManagersYear);
-app.get('/api/getShortTermManagers', shortTermManagersController.getShortTermManagers);
+app.get('/api/getAvgManagerAgeYear', avgManagerAgeYearController.getAvgManagerAgeYear);
+app.get('/api/getSumWinsManagerTop', sumWinsManagerTopController.getSumWinsManagerTop);
+app.get('/api/getAvgLengthTeamKeepsManager', avgLengthTeamKeepsManagerController.getAvgLengthTeamKeepsManager);
 app.get('/api/getUniqueManagers', uniqueManagersController.getUniqueMangers);
 app.get('/api/getManagerWasPlayer', managerWasPlayerController.getManagerWasPlayer);
 app.get('/api/getHonoredManagersTotal', honoredManagersTotalController.getHonoredManagersTotal);
+app.get('/api/getSumDifferentManagersPerTeam', sumDifferentManagersPerTeamController.getSumDifferentManagersPerTeam);
 app.post('/api/postSpecificManagerYear', specificManagerYearController.postSpecificManagerYear);
+app.post('/api/postMaxGamesManagerCoached', maxGamesManagerCoachedController.postMaxGamesManagerCoached);
 
 app.use(express.static('dist'));
 

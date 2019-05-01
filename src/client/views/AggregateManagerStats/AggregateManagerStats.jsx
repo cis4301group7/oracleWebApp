@@ -14,7 +14,7 @@ import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import Modal from '@material-ui/core/Modal';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
 // @material-ui/icons
 import Create from '@material-ui/icons/Create';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
@@ -28,6 +28,8 @@ import FindInPage from '@material-ui/icons/FindInPage';
 import SentimentSatisfiedAlt from '@material-ui/icons/SentimentSatisfiedAlt';
 // core components
 import Paper from '@material-ui/core/Paper';
+import MenuItem from '@material-ui/core/MenuItem';
+import TextField from '@material-ui/core/TextField';
 import CardHeader1 from '@material-ui/core/CardHeader';
 import GridItem from '../../components/Grid/GridItem.jsx';
 import GridContainer from '../../components/Grid/GridContainer.jsx';
@@ -37,7 +39,7 @@ import CardHeader from '../../components/Card/CardHeader.jsx';
 import CardIcon from '../../components/Card/CardIcon.jsx';
 import CardBody from '../../components/Card/CardBody.jsx';
 import CardFooter from '../../components/Card/CardFooter.jsx';
-
+import Button from '../../components/CustomButtons/Button.jsx';
 import { bugs, website, server } from '../../variables/general.jsx';
 
 import {
@@ -122,21 +124,383 @@ const styles = theme => ({
       fontWeight: '400',
       lineHeight: '1'
     }
-  }
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
+  },
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  dense: {
+    marginTop: 19,
+  },
+  menu: {
+    width: 200,
+  },
 });
 
+const teamOptions = [
+  {
+    value: 'ARI',
+    label: 'Arizona Diamondbacks',
+  },
+  {
+    value: 'ATL',
+    label: 'Atlanta Braves',
+  },
+  {
+    value: 'BAL',
+    label: 'Baltimore Orioles',
+  },
+  {
+    value: 'BOS',
+    label: 'Boston Red Sox',
+  },
+  {
+    value: 'CHA',
+    label: 'Chicago White Sox',
+  },
+  {
+    value: 'CHN',
+    label: 'Chicago Cubs',
+  },
+  {
+    value: 'CIN',
+    label: 'Cincinnati Reds',
+  },
+  {
+    value: 'CLE',
+    label: 'Cleveland Indians',
+  },
+  {
+    value: 'COL',
+    label: 'Colorado Rockies',
+  },
+  {
+    value: 'DET',
+    label: 'Detroit Tigers',
+  },
+  {
+    value: 'HOU',
+    label: 'Houston Astros',
+  },
+  {
+    value: 'KCA',
+    label: 'Kansas City Royals',
+  },
+  {
+    value: 'CAL',
+    label: 'LA Angels (older)',
+  },
+  {
+    value: 'ANA',
+    label: 'LA Angels (old)',
+  },
+  {
+    value: 'LAA',
+    label: 'LA Angels',
+  },
+  {
+    value: 'LAN',
+    label: 'LA Dodgers',
+  },
+  {
+    value: 'FLO',
+    label: 'Miami Marlins',
+  },
+  {
+    value: 'ML4',
+    label: 'Milwaukee Brewers (old)',
+  },
+  {
+    value: 'MIL',
+    label: 'Milwaukee Brewers',
+  },
+  {
+    value: 'MIN',
+    label: 'Minnesota Twins',
+  },
+  {
+    value: 'NYA',
+    label: 'NY Yankees',
+  },
+  {
+    value: 'NYN',
+    label: 'NY Mets',
+  },
+  {
+    value: 'OAK',
+    label: 'Oakland Athletics',
+  },
+  {
+    value: 'PHI',
+    label: 'Philadelphia Phillies',
+  },
+  {
+    value: 'PIT',
+    label: 'Pittsburgh Pirates',
+  },
+  {
+    value: 'SDN',
+    label: 'San Diego Padres',
+  },
+  {
+    value: 'SFN',
+    label: 'San Francisco Giants',
+  },
+  {
+    value: 'SEA',
+    label: 'Seattle Mariners',
+  },
+  {
+    value: 'SLN',
+    label: 'St Louis Cardinals',
+  },
+  {
+    value: 'TBA',
+    label: 'Tampa Bay Rays',
+  },
+  {
+    value: 'TEX',
+    label: 'Texas Rangers',
+  },
+  {
+    value: 'TOR',
+    label: 'Toronto Blue Jays',
+  },
+  {
+    value: 'MON',
+    label: 'Washington Nationals (old)',
+  },
+  {
+    value: 'WAS',
+    label: 'Washington Nationals',
+  },
+];
+
+const yearOptions = [
+  {
+    value: '1962',
+    label: '1962',
+  },
+  {
+    value: '1963',
+    label: '1963',
+  },
+  {
+    value: '1964',
+    label: '1964',
+  },
+  {
+    value: '1965',
+    label: '1965',
+  },
+  {
+    value: '1966',
+    label: '1966',
+  },
+  {
+    value: '1967',
+    label: '1967',
+  },
+  {
+    value: '1968',
+    label: '1968',
+  },
+  {
+    value: '1969',
+    label: '1969',
+  },
+  {
+    value: '1970',
+    label: '1970',
+  },
+  {
+    value: '1971',
+    label: '1971',
+  },
+  {
+    value: '1972',
+    label: '1972',
+  },
+  {
+    value: '1973',
+    label: '1973',
+  },
+  {
+    value: '1974',
+    label: '1974',
+  },
+  {
+    value: '1975',
+    label: '1975',
+  },
+  {
+    value: '1976',
+    label: '1976',
+  },
+  {
+    value: '1977',
+    label: '1977',
+  },
+  {
+    value: '1978',
+    label: '1978',
+  },
+  {
+    value: '1979',
+    label: '1979',
+  },
+  {
+    value: '1980',
+    label: '1980',
+  },
+  {
+    value: '1981',
+    label: '1981',
+  },
+  {
+    value: '1982',
+    label: '1982',
+  },
+  {
+    value: '1983',
+    label: '1983',
+  },
+  {
+    value: '1984',
+    label: '1984',
+  },
+  {
+    value: '1985',
+    label: '1985',
+  },
+  {
+    value: '1986',
+    label: '1986',
+  },
+  {
+    value: '1987',
+    label: '1987',
+  },
+  {
+    value: '1988',
+    label: '1988',
+  },
+  {
+    value: '1989',
+    label: '1989',
+  },
+  {
+    value: '1990',
+    label: '1990',
+  },
+  {
+    value: '1991',
+    label: '1991',
+  },
+  {
+    value: '1992',
+    label: '1992',
+  },
+  {
+    value: '1993',
+    label: '1993',
+  },
+  {
+    value: '1994',
+    label: '1994',
+  },
+  {
+    value: '1995',
+    label: '1995',
+  },
+  {
+    value: '1996',
+    label: '1996',
+  },
+  {
+    value: '1997',
+    label: '1997',
+  },
+  {
+    value: '1998',
+    label: '1998',
+  },
+  {
+    value: '1999',
+    label: '1999',
+  },
+  {
+    value: '2000',
+    label: '2000',
+  },
+  {
+    value: '2001',
+    label: '2001',
+  },
+  {
+    value: '2002',
+    label: '2002',
+  },
+  {
+    value: '2003',
+    label: '2003',
+  },
+  {
+    value: '2004',
+    label: '2004',
+  },
+  {
+    value: '2005',
+    label: '2005',
+  },
+  {
+    value: '2006',
+    label: '2006',
+  },
+  {
+    value: '2007',
+    label: '2007',
+  },
+  {
+    value: '2008',
+    label: '2008',
+  },
+  {
+    value: '2009',
+    label: '2009',
+  },
+  {
+    value: '2010',
+    label: '2010',
+  },
+  {
+    value: '2011',
+    label: '2011',
+  },
+  {
+    value: '2012',
+    label: '2012',
+  },
+  {
+    value: '2013',
+    label: '2013',
+  },
+  {
+    value: '2014',
+    label: '2014',
+  },
+  {
+    value: '2015',
+    label: '2015',
+  },
+];
+
 class AggregateManagerStats extends React.Component {
-  // state = {
-  //   value: 0
-  // };
-
-  // handleChange = (event, value) => {
-  //   this.setState({ value });
-  // };
-
-  // handleChangeIndex = (index) => {
-  //   this.setState({ value: index });
-  // };
   constructor(props) {
     super(props);
     this.state = {
@@ -153,25 +517,32 @@ class AggregateManagerStats extends React.Component {
       postseasonRBIsList: [],
       postseasonSuperstarsList: [],
       specificYearManagerList: [],
+      avgLengthTeamKeepsManagerList: [],
+      avgManagerAgeYearList: [],
+      sumDifferentManagersPerTeamList: [],
+      sumWinsManagerTopList: [],
+      maxGamesManagerCoachedList: [],
+      teamInput: 'NYA',
+      yearInput: '2000',
       // Filter must be integrated into
       filterText: '',
-      open: false
+      open: false,
+      open1: false,
+      open2: false
     };
     this.filterUpdate = this.filterUpdate.bind(this);
     this.yearInput = React.createRef();
     this.onSubmitManagerYear = this.handleSubmitManagerYear.bind(this);
+    this.onSubmitManagerMax = this.handleSubmitMaxManager.bind(this);
     this.initUniqueManagerList();
-    // this.initGamesPlayedList();
     this.initManagerWasPlayerList();
     this.initHonoredManagersList();
-    // this.initHitsPerSeasonList();
-    // this.initAverageTeamHitsList();
-    // this.initPlayerSalariesYearList();
     this.initAvgManagerSalariesYearList();
     this.initAvgManagerSalariesTeamList();
-    // this.initPostseasonWinsTeamList();
-    // this.initPostseasonRBIsList();
-    // this.initPostseasonSuperstarsList();
+    this.initAvgLengthTeamKeepsManagerList();
+    this.initAvgManagerAgeYearList();
+    this.initSumDifferentManagersPerTeamList();
+    this.initSumWinsManagerTopList();
   }
 
   initUniqueManagerList = () => {
@@ -179,14 +550,6 @@ class AggregateManagerStats extends React.Component {
       .then(results => results.json())
       .then((data) => {
         this.setState({ uniqueManagerList: data });
-      });
-  }
-
-  initGamesPlayedList = () => {
-    fetch('/api/getUniqueGamesPlayed')
-      .then(results => results.json())
-      .then((data) => {
-        this.setState({ gamesPlayedList: data });
       });
   }
 
@@ -206,30 +569,6 @@ class AggregateManagerStats extends React.Component {
       });
   }
 
-  initHitsPerSeasonList = () => {
-    fetch('/api/getHitsPerSeason')
-      .then(results => results.json())
-      .then((data) => {
-        this.setState({ hitsPerSeasonList: data });
-      });
-  }
-
-  initAverageTeamHitsList = () => {
-    fetch('/api/getAverageTeamHits')
-      .then(results => results.json())
-      .then((data) => {
-        this.setState({ averageTeamHitsList: data });
-      });
-  }
-
-  initPlayerSalariesYearList = () => {
-    fetch('/api/getPlayerSalariesYear')
-      .then(results => results.json())
-      .then((data) => {
-        this.setState({ playerSalariesYearList: data });
-      });
-  }
-
   initAvgManagerSalariesTeamList = () => {
     fetch('/api/getAvgManagerSalariesTeam')
       .then(results => results.json())
@@ -246,27 +585,35 @@ class AggregateManagerStats extends React.Component {
       });
   }
 
-  initPostseasonWinsTeamList = () => {
-    fetch('/api/getPostseasonWinsTeam')
+  initAvgLengthTeamKeepsManagerList = () => {
+    fetch('/api/getAvgLengthTeamKeepsManager')
       .then(results => results.json())
       .then((data) => {
-        this.setState({ postseasonWinsTeamList: data });
+        this.setState({ avgLengthTeamKeepsManagerList: data });
       });
   }
 
-  initPostseasonRBIsList = () => {
-    fetch('/api/getPostseasonRBIs')
+  initAvgManagerAgeYearList = () => {
+    fetch('/api/getAvgManagerAgeYear')
       .then(results => results.json())
       .then((data) => {
-        this.setState({ postseasonRBIsList: data });
+        this.setState({ avgManagerAgeYearList: data });
       });
   }
 
-  initPostseasonSuperstarsList = () => {
-    fetch('/api/getPostseasonSuperstars')
+  initSumDifferentManagersPerTeamList = () => {
+    fetch('/api/getSumDifferentManagersPerTeam')
       .then(results => results.json())
       .then((data) => {
-        this.setState({ postseasonSuperstarsList: data });
+        this.setState({ sumDifferentManagersPerTeamList: data });
+      });
+  }
+
+  initSumWinsManagerTopList = () => {
+    fetch('/api/getSumWinsManagerTop')
+      .then(results => results.json())
+      .then((data) => {
+        this.setState({ sumWinsManagerTopList: data });
       });
   }
 
@@ -274,12 +621,32 @@ class AggregateManagerStats extends React.Component {
     this.setState({ open: true });
   };
 
+  handleOpen1 = () => {
+    this.setState({ open1: true });
+  };
+
+  handleOpen2 = () => {
+    this.setState({ open2: true });
+  };
+
   handleClose = () => {
     this.setState({ open: false });
   };
 
+  handleClose1 = () => {
+    this.setState({ open1: false });
+  };
+
+  handleClose2 = () => {
+    this.setState({ open2: false });
+  };
+
   handleChange = (event, value) => {
     this.setState({ value });
+  };
+
+  handleChangeList = name => event =>{
+    this.setState({ [name]: event.target.value });
   };
 
   handleChangeIndex = (index) => {
@@ -287,27 +654,28 @@ class AggregateManagerStats extends React.Component {
   };
 
   handleSubmitManagerYear(e) {
-    const params = { year: this.yearD.value };
+    const params = { year: this.state.yearInput };
     const urlParams = new URLSearchParams(Object.entries(params));
     e.preventDefault();
     fetch('/api/postSpecificManagerYear?' + urlParams, {
       method: 'POST',
-      // headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      // body: {
-      //   year: this.yearD.value
-      // }
-      // data: {
-      //   year: this.yearD.value
-      // }
     })
-      // .then(function(response) {
-      //   return response.json()
-      // }).then(function(body) {
-      //   console.log(body);
-      // });
       .then(results => results.json())
       .then((data) => {
         this.setState({ specificYearManagerList: data });
+      });
+  }
+
+  handleSubmitMaxManager(e) {
+    const params = { team: this.state.teamInput };
+    const urlParams = new URLSearchParams(Object.entries(params));
+    e.preventDefault();
+    fetch('/api/postMaxGamesManagerCoached?' + urlParams, {
+      method: 'POST',
+    })
+      .then(results => results.json())
+      .then((data) => {
+        this.setState({ maxGamesManagerCoachedList: data });
       });
   }
 
@@ -319,15 +687,11 @@ class AggregateManagerStats extends React.Component {
     const { classes } = this.props;
 
     const specificManagers = this.state.specificYearManagerList.map((data, index) => (
-      [data.MANAGERS]
+      [data.NAMEFIRST, data.NAMELAST, data.WINS, data.LOSSES, data.WINPCT, data.RA, data.HA, data.WSWIN, data.LGWIN, data.DIVWIN, data.WCWIN]
     ));
 
     const countManagers = this.state.uniqueManagerList.map((data, index) => (
       [data.MANAGERS]
-    ));
-
-    const countGamesPlayed = this.state.gamesPlayedList.map((data, index) => (
-      [data.GAMES]
     ));
 
     const countManagerWasPlayerTotal = this.state.managerWasPlayerList.map((data, index) => (
@@ -336,26 +700,6 @@ class AggregateManagerStats extends React.Component {
 
     const countHonoredManagers = this.state.honoredManagersList.map((data, index) => (
       [data.LIVING]
-    ));
-
-    const countHitsPerSeason = this.state.hitsPerSeasonList.map((data, index) => (
-      (data.HITS)
-    ));
-
-    const countHitsPerSeasonLabel = this.state.hitsPerSeasonList.map((data, index) => (
-      [data.YEAR]
-    ));
-
-    const countAverageTeamHits = this.state.averageTeamHitsList.map((data, index) => (
-      [data.FISH]
-    ));
-
-    const countPlayerSalariesYear = this.state.playerSalariesYearList.map((data, index) => (
-      (data.SALARY)
-    ));
-
-    const countPlayerSalariesYearLabel = this.state.playerSalariesYearList.map((data, index) => (
-      [data.TEAMID]
     ));
 
     const countAvgManagerSalariesTeam = this.state.avgManagerSalariesTeamList.map((data, index) => (
@@ -374,25 +718,136 @@ class AggregateManagerStats extends React.Component {
       [data.YEAR]
     ));
 
-    const countPostseasonWinsTeam = this.state.postseasonWinsTeamList.map((data, index) => (
-      (data.WINS)
+    const countTeamKeepsManager = this.state.avgLengthTeamKeepsManagerList.map((data, index) => (
+      (data.TENURE)
     ));
 
-    const countPostseasonWinsTeamLabel = this.state.postseasonWinsTeamList.map((data, index) => (
+    const countTeamKeepsManagerLabel = this.state.avgLengthTeamKeepsManagerList.map((data, index) => (
       [data.TEAMID]
     ));
 
-    const countPostseasonRBIs = this.state.postseasonRBIsList.map((data, index) => (
-      (data.RBI)
+    const countAvgManagerAgeYear = this.state.avgManagerAgeYearList.map((data, index) => (
+      (data.MAGE)
     ));
 
-    const countPostseasonRBIsLabel = this.state.postseasonRBIsList.map((data, index) => (
+    const countAvgManagerAgeYearLabel = this.state.avgManagerAgeYearList.map((data, index) => (
       [data.YEAR]
     ));
 
-    const countPostseasonSuperstars = this.state.postseasonSuperstarsList.map((data, index) => (
-      [data.YEAR, data.ROUND, data.WINTEAM, data.LOSETEAM]
+    const countWinsManagerTop = this.state.sumWinsManagerTopList.map((data, index) => (
+      [data.NAMEFIRST, data.NAMELAST, data.WINS, data.LOSSES, data.WINPCT, data.AWARDS]
     ));
+
+    const countDifferentManagersPerTeam = this.state.sumDifferentManagersPerTeamList.map((data, index) => (
+      (data.MANAGERS)
+    ));
+
+    const countDifferentManagersPerTeamLabel = this.state.sumDifferentManagersPerTeamList.map((data, index) => (
+      [data.TEAMID]
+    ));
+
+    const countMaxGamesManagerCoached = this.state.maxGamesManagerCoachedList.map((data, index) => (
+      [data.NAMEFIRST, data.NAMELAST, data.TENURE, data.WINS, data.LOSSES, data.WINPCT]
+    ));
+
+    const lengthTeamKeepsManagerGraph = {
+      data: {
+        labels: countTeamKeepsManagerLabel,
+        series: [countTeamKeepsManager]
+      },
+      options: {
+        axisX: {
+          showGrid: false
+        },
+        low: 150,
+        high: 1200,
+        chartPadding: {
+          top: 0,
+          right: 5,
+          bottom: 0,
+          left: 0
+        }
+      },
+      responsiveOptions: [
+        [
+          "screen and (max-width: 640px)",
+          {
+            seriesBarDistance: 5,
+            axisX: {
+              labelInterpolationFnc: function(value) {
+                return value[0];
+              }
+            }
+          }
+        ]
+      ],
+      animation: {
+        draw: function(data) {
+          if (data.type === "bar") {
+            data.element.animate({
+              opacity: {
+                begin: (data.index + 1) * delays2,
+                dur: durations2,
+                from: 0,
+                to: 1,
+                easing: "ease"
+              }
+            });
+          }
+        }
+      }
+    };
+
+    const managerAvgAgeYear = {
+      data: {
+        labels: countAvgManagerAgeYearLabel,
+        // series: [[12, 17, 7, 177, 23, 18, 38]]
+        series: [countAvgManagerAgeYear]
+      },
+      options: {
+        lineSmooth: Chartist.Interpolation.cardinal({
+          tension: 0
+        }),
+        low: 60,
+        high: 80, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+        chartPadding: {
+          top: 12,
+          right: 0,
+          bottom: 0,
+          left: 16
+        }
+      },
+      // for animation
+      animation: {
+        draw: function(data) {
+          if (data.type === "line" || data.type === "area") {
+            data.element.animate({
+              d: {
+                begin: 600,
+                dur: 700,
+                from: data.path
+                  .clone()
+                  .scale(1, 0)
+                  .translate(0, data.chartRect.height())
+                  .stringify(),
+                to: data.path.clone().stringify(),
+                easing: Chartist.Svg.Easing.easeOutQuint
+              }
+            });
+          } else if (data.type === "point") {
+            data.element.animate({
+              opacity: {
+                begin: (data.index + 1) * delays,
+                dur: durations,
+                from: 0,
+                to: 1,
+                easing: "ease"
+              }
+            });
+          }
+        }
+      }
+    };
 
     const managerAvgSalaryYear = {
       data: {
@@ -493,21 +948,56 @@ class AggregateManagerStats extends React.Component {
       }
     };
 
+    const differentManagersTeam = {
+      data: {
+        labels: countDifferentManagersPerTeamLabel,
+        series: [countDifferentManagersPerTeam]
+      },
+      options: {
+        axisX: {
+          showGrid: false
+        },
+        low: 1,
+        high: 70,
+        chartPadding: {
+          top: 0,
+          right: 5,
+          bottom: 0,
+          left: 0
+        }
+      },
+      responsiveOptions: [
+        [
+          "screen and (max-width: 640px)",
+          {
+            seriesBarDistance: 5,
+            axisX: {
+              labelInterpolationFnc: function(value) {
+                return value[0];
+              }
+            }
+          }
+        ]
+      ],
+      animation: {
+        draw: function(data) {
+          if (data.type === "bar") {
+            data.element.animate({
+              opacity: {
+                begin: (data.index + 1) * delays2,
+                dur: durations2,
+                from: 0,
+                to: 1,
+                easing: "ease"
+              }
+            });
+          }
+        }
+      }
+    };
+
     return (
       <div>
-        {/* <GridContainer>
-          <GridItem xs={8} sm={8} md={8}>
-            <Card>
-              <CardHeader color="info" stats icon>
-                <CardIcon color="info">
-                  <img src={logo} width="250" alt="..." />
-                </CardIcon>
-                <p className={classes.cardCategory}>Major League Baseball</p>
-                <h3 className={classes.cardTitle}>Statistics Database</h3>
-              </CardHeader>
-            </Card>
-          </GridItem>
-        </GridContainer> */}
         <GridContainer>
           <GridItem xs={12} sm={6} md={3}>
             <Card>
@@ -525,22 +1015,6 @@ class AggregateManagerStats extends React.Component {
               </CardFooter>
             </Card>
           </GridItem>
-          {/* <GridItem xs={12} sm={6} md={3}>
-            <Card>
-              <CardHeader color="warning" stats icon>
-                <CardIcon color="warning">
-                  <Icon>spa</Icon>
-                </CardIcon>
-                <p className={classes.cardCategory}>Games</p>
-                <h3 className={classes.cardTitle}> {countGamesPlayed}</h3>
-              </CardHeader>
-              <CardFooter stats>
-                <div className={classes.stats}>
-                  Total of max games in a season since 1968
-                </div>
-              </CardFooter>
-            </Card>
-          </GridItem> */}
           <GridItem xs={12} sm={6} md={3}>
             <Card>
               <CardHeader color="primary" stats icon>
@@ -576,8 +1050,149 @@ class AggregateManagerStats extends React.Component {
         </GridContainer>
         <GridContainer>
           <GridItem xs={12} sm={12} md={12}>
+            <Card chart>
+              <CardHeader color="primary">
+                <ChartistGraph
+                  className="ct-chart"
+                  data={lengthTeamKeepsManagerGraph.data}
+                  type="Bar"
+                  options={lengthTeamKeepsManagerGraph.options}
+                  responsiveOptions={lengthTeamKeepsManagerGraph.responsiveOptions}
+                  listener={lengthTeamKeepsManagerGraph.animation}
+                />
+              </CardHeader>
+              <CardBody>
+                <h4 className={classes.cardTitle}>Manager Average Tenure</h4>
+                <p className={classes.cardCategory}>
+                  Length of time a team keeps their managers on average
+                </p>
+              </CardBody>
+            </Card>
+          </GridItem>
+        </GridContainer>
+        <GridContainer>
+          <GridItem xs={12} sm={12} md={12}>
             <Card>
               <CardHeader color="warning">
+                <CardHeader1
+                  classes={{
+                    title: classes.cardTitleWhite,
+                  }}
+                  action={(
+                    <div align="right">
+                      <IconButton color="primary" onClick={this.handleOpen1}>
+                        <Code />
+                      </IconButton>
+                      <Modal
+                        aria-labelledby="simple-modal-title"
+                        aria-describedby="simple-modal-description"
+                        open={this.state.open1}
+                        onClose={this.handleClose1}
+                      >
+                        <div style={getModalStyle()} className={classes.paper}>
+                          <Typography variant="h4" id="modal-title">
+                            SQL
+                          </Typography>
+                          <CardBody>
+                            <Typography variant="subtitle4" id="simple-modal-description">
+                            SELECT RYBROOKS.MANAGERS.PLAYERID AS PLAYERID, NAMEFIRST, NAMELAST, 
+                            SUM(RYBROOKS.MANAGERS.W) AS WINS, SUM(RYBROOKS.MANAGERS.L) AS LOSSES, 
+                            CAST(round(((SUM(RYBROOKS.MANAGERS.W)/SUM(RYBROOKS.MANAGERS.G))*100),2) as decimal(16,2)) AS WINPCT, 
+                            RA, HA, WSWIN, LGWIN, DIVWIN, WCWIN 
+                            FROM RYBROOKS.MANAGERS 
+                            INNER JOIN RYBROOKS.PLAYERS 
+                            ON RYBROOKS.PLAYERS.PLAYERID = RYBROOKS.MANAGERS.PLAYERID 
+                            INNER JOIN RYBROOKS.TEAMSTATS 
+                            ON RYBROOKS.TEAMSTATS.YEAR = RYBROOKS.MANAGERS.YEAR 
+                            AND RYBROOKS.TEAMSTATS.TEAMID = RYBROOKS.MANAGERS.TEAMID 
+                            WHERE RYBROOKS.MANAGERS.YEAR = :year 
+                            GROUP BY RYBROOKS.MANAGERS.PLAYERID, 
+                            NAMEFIRST, NAMELAST, RA, HA, WSWIN, LGWIN, DIVWIN, WCWIN 
+                            ORDER BY WSWIN DESC, LGWIN DESC, DIVWIN DESC, 
+                            WCWIN DESC, WINPCT DESC, RA ASC, HA ASC
+                            </Typography>
+                          </CardBody>
+                          <GridContainer>
+                            <a href="https://github.com/cis4301group7/oracleWebApp/blob/master/src/server/controllers/home/getPostseasonSuperstars.js" target="_blank" rel="noopener noreferrer">
+                              <Button color="primary">
+                                Source Code
+                              </Button>
+                            </a>
+                          </GridContainer>
+                        </div>
+                      </Modal>
+                    </div>
+                  )
+                  }
+                  title="Top Ranking Managers in a Year"
+                  subheader="Managers ranked based on how well they did in the postseason and win percentage in the regular season"
+                />
+              </CardHeader>
+              <CardBody>
+                <form onSubmit={this.onSubmitManagerYear}>
+                  <TextField
+                    id="yearD"
+                    select
+                    label="All possible years"
+                    className={classes.textField}
+                    value={this.state.yearInput}
+                    // onChange={this.handleChangeList('teamOptions')}
+                    onChange={this.handleChangeList('yearInput')}
+                    ref={(ref) => { this.yearD = ref; }}
+                    // onChange={this.onSubmitCustomPostseasonGraph}
+                    SelectProps={{
+                      MenuProps: {
+                        className: classes.menu,
+                      },
+                    }}
+                    // helperText="Please select an option"
+                    margin="normal"
+                  >
+                    {yearOptions.map(option => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                  <Button color="primary" type="submit">
+                    Update
+                  </Button>
+                  {/* <input type="Submit" /> */}
+                </form>
+                <Table
+                  tableHeaderColor="success"
+                  tableHead={['First Name', 'Last Name', 'Wins', 'Losses',
+                  'Win %', 'RA', 'HA', 'WS', 'LG', 'DIV', 'WC']}
+                  // tableData={realTable}
+                  tableData={specificManagers}
+                />
+              </CardBody>
+            </Card>
+          </GridItem>
+        </GridContainer>
+        <GridContainer>
+          <GridItem xs={12} sm={12} md={12}>
+            <Card chart>
+              <CardHeader color="success">
+                <ChartistGraph
+                  className="ct-chart"
+                  data={managerAvgAgeYear.data}
+                  type="Line"
+                  options={managerAvgAgeYear.options}
+                  listener={managerAvgAgeYear.animation}
+                />
+              </CardHeader>
+              <CardBody>
+                <h4 className={classes.cardTitle}>Manager Ages Each Year</h4>
+                <p className={classes.cardCategory}>
+                  The max age of every manager each year since 1984
+                </p>
+              </CardBody>
+            </Card>
+          </GridItem>
+          <GridItem xs={12} sm={12} md={12}>
+            <Card>
+              <CardHeader color="info">
                 <CardHeader1
                   classes={{
                     title: classes.cardTitleWhite,
@@ -621,30 +1236,40 @@ class AggregateManagerStats extends React.Component {
                     </div>
                   )
                   }
-                  title="Managers in a Specific Year"
-                  subheader="Managers who were active in the year given"
+                  title="Hall of Fame Most Winning Managers"
+                  subheader="Ranked List of Managers who won the most games"
                 />
               </CardHeader>
               <CardBody>
-                {/* <form onSubmit={this.onSubmitManagerYear}>
-                  <input type="text" placeholder="Year" ref={this.yearInput} />
-                  <input type="submit" />
-                </form> */}
-                <form onSubmit={this.onSubmitManagerYear}>
-                  <input ref={(ref) => { this.yearD = ref; }} placeholder="YEAR" type="text" name="year" />
-                  <input type="Submit" />
-                </form>
                 <Table
-                  tableHeaderColor="success"
-                  tableHead={['Year', 'Round', 'Winning Team', 'Losing Team']}
+                  tableHeaderColor="info"
+                  tableHead={['First Name', 'Last Name', 'Wins', 'Losses', 'Win %', 'Awards']}
                   // tableData={realTable}
-                  tableData={specificManagers}
+                  tableData={countWinsManagerTop}
                 />
               </CardBody>
             </Card>
           </GridItem>
-        </GridContainer>
-        <GridContainer>
+          <GridItem xs={12} sm={12} md={12}>
+            <Card chart>
+              <CardHeader color="warning">
+                <ChartistGraph
+                  className="ct-chart"
+                  data={differentManagersTeam.data}
+                  type="Bar"
+                  options={differentManagersTeam.options}
+                  responsiveOptions={differentManagersTeam.responsiveOptions}
+                  listener={differentManagersTeam.animation}
+                />
+              </CardHeader>
+              <CardBody>
+                <h4 className={classes.cardTitle}>Different Managers Per Team</h4>
+                <p className={classes.cardCategory}>
+                  Number of Different Managers each Team has had since 1974
+                </p>
+              </CardBody>
+            </Card>
+          </GridItem>
           <GridItem xs={12} sm={12} md={12}>
             <Card chart>
               <CardHeader color="rose">
@@ -659,39 +1284,102 @@ class AggregateManagerStats extends React.Component {
               <CardBody>
                 <h4 className={classes.cardTitle}>Average Manager Salaries</h4>
                 <p className={classes.cardCategory}>
-                  {/* <span className={classes.successText}>
-                    <ArrowUpward className={classes.upArrowCardCategory} />
-                  </span>{' '} */}
                   The average of all manager salaries paid each year since 1984
                 </p>
               </CardBody>
-              {/* <CardFooter chart>
-                <div className={classes.stats}>
-                  <AccessTime /> updated 4 minutes ago
-                </div>
-              </CardFooter> */}
             </Card>
           </GridItem>
-          {/* <GridItem xs={12} sm={12} md={6}>
-            <Card chart>
-              <CardHeader color="info">
-                <ChartistGraph
-                  className="ct-chart"
-                  data={teamAvgSalary.data}
-                  type="Bar"
-                  options={teamAvgSalary.options}
-                  responsiveOptions={teamAvgSalary.responsiveOptions}
-                  listener={teamAvgSalary.animation}
+          <GridItem xs={12} sm={12} md={12}>
+            <Card>
+              <CardHeader color="primary">
+                <CardHeader1
+                  classes={{
+                    title: classes.cardTitleWhite,
+                  }}
+                  action={(
+                    <div align="right">
+                      <IconButton color="primary" onClick={this.handleOpen2}>
+                        <Code />
+                      </IconButton>
+                      <Modal
+                        aria-labelledby="simple-modal-title"
+                        aria-describedby="simple-modal-description"
+                        open={this.state.open2}
+                        onClose={this.handleClose2}
+                      >
+                        <div style={getModalStyle()} className={classes.paper}>
+                          <Typography variant="h4" id="modal-title">
+                            SQL
+                          </Typography>
+                          <CardBody>
+                            <Typography variant="subtitle4" id="simple-modal-description">
+                            SELECT RYBROOKS.MANAGERS.PLAYERID AS PLAYERID, NAMEFIRST, NAMELAST, SUM(G) AS TENURE, 
+                            SUM(W) AS WINS, SUM(L) AS LOSSES, CAST(round(((SUM(W)/SUM(G))*100),2) as decimal(8,2)) AS WINPCT 
+                            FROM RYBROOKS.MANAGERS 
+                            INNER JOIN RYBROOKS.PLAYERS 
+                            ON RYBROOKS.PLAYERS.PLAYERID = RYBROOKS.MANAGERS.PLAYERID 
+                            WHERE TEAMID = :team 
+                            GROUP BY RYBROOKS.MANAGERS.TEAMID, RYBROOKS.MANAGERS.PLAYERID, 
+                            NAMEFIRST, NAMELAST 
+                            ORDER BY SUM(G) DESC
+                            </Typography>
+                          </CardBody>
+                          <GridContainer>
+                            <a href="https://github.com/cis4301group7/oracleWebApp/blob/master/src/server/controllers/home/getPostseasonSuperstars.js" target="_blank" rel="noopener noreferrer">
+                              <Button color="primary">
+                                Source Code
+                              </Button>
+                            </a>
+                          </GridContainer>
+                        </div>
+                      </Modal>
+                    </div>
+                  )
+                  }
+                  title="Total Games Coached by a Manager"
+                  subheader="Sum of games coached by a manager on a specific team"
                 />
               </CardHeader>
               <CardBody>
-                <h4 className={classes.cardTitle}>Team Player Salaries</h4>
-                <p className={classes.cardCategory}>
-                  Average salary paid by each team to players since 1962
-                </p>
+                <form onSubmit={this.onSubmitManagerMax}>
+                  <TextField
+                    id="teamD"
+                    select
+                    label="All possible teams"
+                    className={classes.textField}
+                    value={this.state.teamInput}
+                    // onChange={this.handleChangeList('teamOptions')}
+                    onChange={this.handleChangeList('teamInput')}
+                    ref={(ref) => { this.yearD = ref; }}
+                    // onChange={this.onSubmitCustomPostseasonGraph}
+                    SelectProps={{
+                      MenuProps: {
+                        className: classes.menu,
+                      },
+                    }}
+                    // helperText="Please select an option"
+                    margin="normal"
+                  >
+                    {teamOptions.map(option => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                  <Button color="primary" type="submit">
+                    Update
+                  </Button>
+                  {/* <input type="Submit" /> */}
+                </form>
+                <Table
+                  tableHeaderColor="primary"
+                  tableHead={['First Name', 'Last Name', 'Tenure', 'Wins', 'Losses', 'Win %']}
+                  // tableData={realTable}
+                  tableData={countMaxGamesManagerCoached}
+                />
               </CardBody>
             </Card>
-          </GridItem> */}
+          </GridItem>
           <GridItem xs={12} sm={12} md={12}>
             <Card chart>
               <CardHeader color="info">
@@ -710,290 +1398,9 @@ class AggregateManagerStats extends React.Component {
                   Average manager salaries paid by each team since 1974
                 </p>
               </CardBody>
-              {/* <CardFooter chart>
-                <div className={classes.stats}>
-                  <AccessTime /> campaign sent 2 days ago
-                </div>
-              </CardFooter> */}
             </Card>
           </GridItem>
         </GridContainer>
-        {/* <GridContainer>
-          <GridItem xs={12} sm={12} md={6}>
-            <Card chart>
-              <CardHeader color="primary">
-                <ChartistGraph
-                  className="ct-chart"
-                  data={teamPostseasonWins.data}
-                  type="Bar"
-                  options={teamPostseasonWins.options}
-                  responsiveOptions={teamPostseasonWins.responsiveOptions}
-                  listener={teamPostseasonWins.animation}
-                />
-              </CardHeader>
-              <CardBody>
-                <h4 className={classes.cardTitle}>Postseason Wins by Team</h4>
-                <p className={classes.cardCategory}>
-                  Total Wins in the Postseason by each team since 1962
-                </p>
-              </CardBody>
-            </Card>
-          </GridItem>
-          <GridItem xs={12} sm={12} md={6}>
-            <Card chart>
-              <CardHeader color="danger">
-                <ChartistGraph
-                  className="ct-chart"
-                  data={postseasonRBIs.data}
-                  type="Line"
-                  options={postseasonRBIs.options}
-                  listener={postseasonRBIs.animation}
-                />
-              </CardHeader>
-              <CardBody>
-                <h4 className={classes.cardTitle}>Postseason RBIs</h4>
-                <p className={classes.cardCategory}>
-                  RBIs in the Postseason since 1980
-                </p>
-              </CardBody>
-            </Card>
-          </GridItem>
-        </GridContainer> */}
-        <GridContainer>
-          <GridItem xs={12} sm={12} md={12}>
-            <Card>
-              <CardHeader color="success">
-                <CardHeader1
-                  classes={{
-                    title: classes.cardTitleWhite,
-                  }}
-                  action={(
-                    <div align="right">
-                      <IconButton color="primary" onClick={this.handleOpen}>
-                        <Code />
-                      </IconButton>
-                      <Modal
-                        aria-labelledby="simple-modal-title"
-                        aria-describedby="simple-modal-description"
-                        open={this.state.open}
-                        onClose={this.handleClose}
-                      >
-                        <div style={getModalStyle()} className={classes.paper}>
-                          <Typography variant="h4" id="modal-title">
-                            SQL
-                          </Typography>
-                          <CardBody>
-                            <Typography variant="subtitle4" id="simple-modal-description">
-                            SELECT YEAR, ROUND, x.TEAMNAME AS WINTEAM, y.TEAMNAME AS LOSETEAM 
-                            FROM RYBROOKS.POSTSEASONSERIES c 
-                            INNER JOIN RYBROOKS.TEAMS x 
-                            ON x.TEAMID = c.TEAMIDWINNER 
-                            INNER JOIN RYBROOKS.TEAMS y 
-                            ON y.TEAMID = c.TEAMIDLOSER 
-                            WHERE WINS >= 4 AND LOSSES = 0 AND ROUND = 'WS'
-                            ORDER BY YEAR ASC
-                            </Typography>
-                          </CardBody>
-                          <GridContainer>
-                            <a href="https://github.com/cis4301group7/oracleWebApp/blob/master/src/server/controllers/home/getPostseasonSuperstars.js" target="_blank" rel="noopener noreferrer">
-                              <Button color="primary">
-                                Source Code
-                              </Button>
-                            </a>
-                          </GridContainer>
-                        </div>
-                      </Modal>
-                    </div>
-                  )
-                  }
-                  title="Longest Serving Managers"
-                  subheader="Managers ranked in order of how long they served in the league"
-                />
-              </CardHeader>
-              <CardBody>
-                <Table
-                  tableHeaderColor="success"
-                  tableHead={['Year', 'Round', 'Winning Team', 'Losing Team']}
-                  // tableData={realTable}
-                  tableData={countPostseasonSuperstars}
-                />
-              </CardBody>
-            </Card>
-          </GridItem>
-        </GridContainer>
-        <GridContainer>
-          <GridItem xs={12} sm={12} md={12}>
-            <Card>
-              <CardHeader color="primary">
-                <CardHeader1
-                  classes={{
-                    title: classes.cardTitleWhite,
-                  }}
-                  action={(
-                    <div align="right">
-                      <IconButton color="primary" onClick={this.handleOpen}>
-                        <Code />
-                      </IconButton>
-                      <Modal
-                        aria-labelledby="simple-modal-title"
-                        aria-describedby="simple-modal-description"
-                        open={this.state.open}
-                        onClose={this.handleClose}
-                      >
-                        <div style={getModalStyle()} className={classes.paper}>
-                          <Typography variant="h4" id="modal-title">
-                            SQL
-                          </Typography>
-                          <CardBody>
-                            <Typography variant="subtitle4" id="simple-modal-description">
-                            SELECT YEAR, ROUND, x.TEAMNAME AS WINTEAM, y.TEAMNAME AS LOSETEAM 
-                            FROM RYBROOKS.POSTSEASONSERIES c 
-                            INNER JOIN RYBROOKS.TEAMS x 
-                            ON x.TEAMID = c.TEAMIDWINNER 
-                            INNER JOIN RYBROOKS.TEAMS y 
-                            ON y.TEAMID = c.TEAMIDLOSER 
-                            WHERE WINS >= 4 AND LOSSES = 0 AND ROUND = 'WS'
-                            ORDER BY YEAR ASC
-                            </Typography>
-                          </CardBody>
-                          <GridContainer>
-                            <a href="https://github.com/cis4301group7/oracleWebApp/blob/master/src/server/controllers/home/getPostseasonSuperstars.js" target="_blank" rel="noopener noreferrer">
-                              <Button color="primary">
-                                Source Code
-                              </Button>
-                            </a>
-                          </GridContainer>
-                        </div>
-                      </Modal>
-                    </div>
-                  )
-                  }
-                  title="Shortest Serving Managers"
-                  subheader="Managers ranked in order by how short they served in the league"
-                />
-              </CardHeader>
-              <CardBody>
-                <Table
-                  tableHeaderColor="success"
-                  tableHead={['Year', 'Round', 'Winning Team', 'Losing Team']}
-                  // tableData={realTable}
-                  tableData={countPostseasonSuperstars}
-                />
-              </CardBody>
-            </Card>
-          </GridItem>
-        </GridContainer>
-        <GridContainer>
-          <GridItem xs={12} sm={12} md={12}>
-            <Card>
-              <CardHeader color="warning">
-                <CardHeader1
-                  classes={{
-                    title: classes.cardTitleWhite,
-                  }}
-                  action={(
-                    <div align="right">
-                      <IconButton color="primary" onClick={this.handleOpen}>
-                        <Code />
-                      </IconButton>
-                      <Modal
-                        aria-labelledby="simple-modal-title"
-                        aria-describedby="simple-modal-description"
-                        open={this.state.open}
-                        onClose={this.handleClose}
-                      >
-                        <div style={getModalStyle()} className={classes.paper}>
-                          <Typography variant="h4" id="modal-title">
-                            SQL
-                          </Typography>
-                          <CardBody>
-                            <Typography variant="subtitle4" id="simple-modal-description">
-                            SELECT YEAR, ROUND, x.TEAMNAME AS WINTEAM, y.TEAMNAME AS LOSETEAM 
-                            FROM RYBROOKS.POSTSEASONSERIES c 
-                            INNER JOIN RYBROOKS.TEAMS x 
-                            ON x.TEAMID = c.TEAMIDWINNER 
-                            INNER JOIN RYBROOKS.TEAMS y 
-                            ON y.TEAMID = c.TEAMIDLOSER 
-                            WHERE WINS >= 4 AND LOSSES = 0 AND ROUND = 'WS'
-                            ORDER BY YEAR ASC
-                            </Typography>
-                          </CardBody>
-                          <GridContainer>
-                            <a href="https://github.com/cis4301group7/oracleWebApp/blob/master/src/server/controllers/home/getPostseasonSuperstars.js" target="_blank" rel="noopener noreferrer">
-                              <Button color="primary">
-                                Source Code
-                              </Button>
-                            </a>
-                          </GridContainer>
-                        </div>
-                      </Modal>
-                    </div>
-                  )
-                  }
-                  title="Multiple Managers in a Year"
-                  subheader="Teams that had multiple managers in the same year"
-                />
-              </CardHeader>
-              <CardBody>
-                <Table
-                  tableHeaderColor="success"
-                  tableHead={['Year', 'Round', 'Winning Team', 'Losing Team']}
-                  // tableData={realTable}
-                  tableData={countPostseasonSuperstars}
-                />
-              </CardBody>
-            </Card>
-          </GridItem>
-        </GridContainer>
-        {/* <GridContainer>
-          <GridItem xs={12} sm={12} md={12}>
-            <Card>
-              <CardHeader color="success">
-                <Button color="default" className={classes.title}>
-                  <a href="currentprojects">
-                    <h3 className={classes.cardTitleWhite}>Projects In Progress</h3>
-                  </a>
-                </Button>
-              </CardHeader>
-              <CardBody>
-                <Table
-                  tableHeaderColor="success"
-                  tableHead={['#', 'Name', 'Team Members', 'Started', 'Due by', 'Days Remaining', 'Go to']}
-                  tableData={[
-                    ['1', 'Environmental Cleanup', '3', 'June 31st', 'December 5th', '31', <a href='currentprojects'> <KeyboardArrowRight /></a>],
-                    ['2', 'Fishing Location Detection', '4', 'September 15th', 'February 14th', '110', <a href='currentprojects'> <KeyboardArrowRight /></a>],
-                    ['3', 'Electronic Recycle Program', '0', 'October 1st', 'December 30th', '45', <a href='currentprojects'> <KeyboardArrowRight /></a>],
-                    ['4', 'National Defense Spending Tracker', '2', 'November 2nd', 'January 7th', '54', <a href='currentprojects'> <KeyboardArrowRight /></a>]
-                  ]}
-                />
-              </CardBody>
-            </Card>
-          </GridItem>
-        </GridContainer>
-        <GridContainer>
-          <GridItem xs={12} sm={12} md={12}>
-            <Card>
-              <CardHeader color="primary">
-                <Button color="default" className={classes.title}>
-                  <a href="projectproposals">
-                    <h3 className={classes.cardTitleWhite}>Active Project Proposals</h3>
-                  </a>
-                </Button>
-              </CardHeader>
-              <CardBody>
-                <Table
-                  tableHeaderColor="success"
-                  tableHead={['#', 'Name', 'Estimated Members', 'Workload', 'Need by', 'Start by', 'Go to']}
-                  tableData={[
-                    ['1', 'Candy Preference Survey', '3', 'Medium', 'December 24th', 'November 18th',<a href='projectproposals'> <KeyboardArrowRight /></a>],
-                    ['2', 'Home Improvement Resource Finder', '4', 'Large', 'February 2nd', 'December 1st', <a href='projectproposals'> <KeyboardArrowRight /></a>],
-                    ['3', 'Las Vegas Petting Sitting Matcher', '4', 'Medium', 'March 25th', 'December 5th', <a href='projectproposals'> <KeyboardArrowRight /></a>]
-                  ]}
-                />
-              </CardBody>
-            </Card>
-          </GridItem>
-        </GridContainer> */}
       </div>
     );
   }
