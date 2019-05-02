@@ -29,6 +29,21 @@ const honoredManagersTotalController = require('./controllers/aggManagers/getHon
 const specificManagerYearController = require('./controllers/aggManagers/postSpecificManagerYear');
 const maxGamesManagerCoachedController = require('./controllers/aggManagers/postMaxGamesManagerCoached');
 const sumDifferentManagersPerTeamController = require('./controllers/aggManagers/getSumDifferentManagersPerTeam');
+//Teams page controllers 
+const cardOneController = require('./controllers/TeamStats/cardOne');
+const cardTwoController = require('./controllers/TeamStats/cardTwo');
+const cardThreeController = require('./controllers/TeamStats/cardThree');
+const graphOneController = require('./controllers/TeamStats/graphOne');
+const tableTwoController = require('./controllers/TeamStats/tableTwo');
+const tableThreeController = require('./controllers/TeamStats/tableThree');
+const tableOneController = require('./controllers/TeamStats/tableOne');
+//Positions page controllers
+const posAppearancescontroller = require('./controllers/positions/posAppearances');
+const avgSalaryeController = require('./controllers/positions/avgSalary');
+const posAvgHitsController = require('./controllers/positions/posAvgHits');
+const getMaxPlayerscontroller = require('./controllers/positions/getMaxPlayers');
+const getMaxPositionController = require('./controllers/positions/getMaxPosition');
+const getMaxStrikeOutsController = require('./controllers/positions/getMaxStrikeOuts');
 
 const app = express();
 
@@ -61,6 +76,21 @@ app.get('/api/getHonoredManagersTotal', honoredManagersTotalController.getHonore
 app.get('/api/getSumDifferentManagersPerTeam', sumDifferentManagersPerTeamController.getSumDifferentManagersPerTeam);
 app.post('/api/postSpecificManagerYear', specificManagerYearController.postSpecificManagerYear);
 app.post('/api/postMaxGamesManagerCoached', maxGamesManagerCoachedController.postMaxGamesManagerCoached);
+//Teams
+app.get('/api/cardOne', cardOneController.cardOne);
+app.get('/api/cardTwo', cardTwoController.cardTwo);
+app.get('/api/cardThree', cardThreeController.cardThree);
+app.get('/api/graphOne', graphOneController.graphOne);
+app.get('/api/tableTwo', tableTwoController.tableTwo);
+app.post('/api/tableThree', tableThreeController.tableThree);
+app.post('/api/tableOne', tableOneController.tableOne);
+//Positions
+app.get('/api/posAppearances', posAppearancescontroller.posAppearances);
+app.get('/api/getMaxPlayers', getMaxPlayerscontroller.getMaxPlayers);
+app.post('/api/avgSalary', avgSalaryeController.avgSalary);
+app.post('/api/posAvgHits', posAvgHitsController.posAvgHits);
+app.get('/api/getMaxPosition', getMaxPositionController.getMaxPosition);
+app.get('/api/getMaxStrikeOuts', getMaxStrikeOutsController.getMaxStrikeOuts);
 
 app.use(express.static('dist'));
 

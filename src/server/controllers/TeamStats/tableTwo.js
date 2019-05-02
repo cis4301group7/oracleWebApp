@@ -1,7 +1,7 @@
 const oracledb = require('oracledb');
 const dbConfig = require('../../config/config');
 
-exports.getHitsPerSeason = async function (req, res) {
+exports.tableTwo = async function (req, res) {
   oracledb.getConnection(
     {
       user: dbConfig.user,
@@ -21,8 +21,13 @@ exports.getHitsPerSeason = async function (req, res) {
       }
 
       connection.execute(
-        'SELECT YEAR, SUM(H) AS HITS FROM RYBROOKS.BATTINGSTATS \
-          GROUP BY YEAR ORDER BY YEAR ASC', {}, {
+        'SELECT UNIQUE(TEAMNAME) AS TEAMNAME, POSTSEASONSERIES.WINS AS POSTSEASONWINS, \
+        CAST((TEAMSTATS.W/TEAMSTATS.G)*100 AS INT) AS WINS, \
+        CAST((TEAMSTATS.L/TEAMSTATS.G)*100 AS INT) AS LOSSES \
+        FROM RYBROOKS.TEAMS INNER JOIN RYBROOKS.TEAMSTATS \
+        ON TEAMS.TEAMID = TEAMSTATS.TEAMID INNER JOIN RYBROOKS.POSTSEASONSERIES \
+        ON TEAMS.TEAMID = POSTSEASONSERIES.TEAMIDWINNER \
+        WHERE TEAMSTATS.WCWIN = \'Y\' AND POSTSEASONSERIES.WINS > 0 AND (TEAMSTATS.W/TEAMSTATS.G)*100 > (TEAMSTATS.L/TEAMSTATS.G)*100', {}, {
           outFormat: oracledb.OBJECT // Return the result as Object
         }, (err, result) => {
           if (err) {
@@ -42,7 +47,7 @@ exports.getHitsPerSeason = async function (req, res) {
               if (err) {
                 console.error(err.message);
               } else {
-                console.log('GET /TotalCount : Connection released');
+                console.log('GET /tableTwo : Connection released');
               }
             }
           );

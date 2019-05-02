@@ -1,7 +1,7 @@
 const oracledb = require('oracledb');
 const dbConfig = require('../../config/config');
 
-exports.getHitsPerSeason = async function (req, res) {
+exports.getMaxPosition = async function (req, res) {
   oracledb.getConnection(
     {
       user: dbConfig.user,
@@ -21,8 +21,13 @@ exports.getHitsPerSeason = async function (req, res) {
       }
 
       connection.execute(
-        'SELECT YEAR, SUM(H) AS HITS FROM RYBROOKS.BATTINGSTATS \
-          GROUP BY YEAR ORDER BY YEAR ASC', {}, {
+        'sELECT POSNAME FROM ((SELECT POSITIONID AS POSID1, COUNT(L)\
+        FROM RYBROOKS.APPEARANCES JOIN RYBROOKS.TEAMSTATS\
+        ON APPEARANCES.TEAMID = TEAMSTATS.TEAMID\
+        GROUP BY POSITIONID \
+        ORDER BY COUNT(L) DESC FETCH NEXT 1 ROW ONLY) \
+        JOIN (SELECT POSITIONNAME AS POSNAME, POSITIONID AS POSID2 FROM RYBROOKS.POSITIONS)\
+        ON POSID1 = POSID2)', {}, {
           outFormat: oracledb.OBJECT // Return the result as Object
         }, (err, result) => {
           if (err) {
@@ -42,7 +47,7 @@ exports.getHitsPerSeason = async function (req, res) {
               if (err) {
                 console.error(err.message);
               } else {
-                console.log('GET /TotalCount : Connection released');
+                console.log('GET /MaxPosition : Connection released');
               }
             }
           );

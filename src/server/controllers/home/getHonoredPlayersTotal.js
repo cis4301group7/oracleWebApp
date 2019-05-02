@@ -25,7 +25,7 @@ exports.getHonoredPlayersTotal = async function (req, res) {
           (SELECT * FROM RYBROOKS.PLAYERS \
           INNER JOIN RYBROOKS.PLAYERAWARDS \
           ON RYBROOKS.PLAYERS.PLAYERID = RYBROOKS.PLAYERAWARDS.PLAYERID \
-          WHERE DEATHYEAR IS NOT NULL)', {}, {
+          WHERE DEATHYEAR IS NULL)', {}, {
           outFormat: oracledb.OBJECT // Return the result as Object
         }, (err, result) => {
           if (err) {

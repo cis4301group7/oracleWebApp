@@ -1,7 +1,10 @@
+/* eslint-disable func-names */
 const oracledb = require('oracledb');
 const dbConfig = require('../../config/config');
 
-exports.getHitsPerSeason = async function (req, res) {
+exports.avgSalary = async function (req, res) {
+  const bin = req.query.team;
+
   oracledb.getConnection(
     {
       user: dbConfig.user,
@@ -21,8 +24,15 @@ exports.getHitsPerSeason = async function (req, res) {
       }
 
       connection.execute(
-        'SELECT YEAR, SUM(H) AS HITS FROM RYBROOKS.BATTINGSTATS \
-          GROUP BY YEAR ORDER BY YEAR ASC', {}, {
+        'SELECT AVGSALARY, PLAYER, POSNAME FROM ((SELECT CAST(AVG(SALARY) AS INT) AS AVGSALARY, \
+        APPEARANCES.PLAYERID AS PLAYER, APPEARANCES.POSITIONID AS POSID\
+        FROM RYBROOKS.SALARIES JOIN RYBROOKS.APPEARANCES \
+        ON SALARIES.PLAYERID = APPEARANCES.PLAYERID \
+        WHERE APPEARANCES.TEAMID = :team \
+        GROUP BY APPEARANCES.PLAYERID, APPEARANCES.POSITIONID \
+        ORDER BY AVG(SALARY) DESC FETCH NEXT 10 ROWS ONLY) JOIN \
+        (SELECT POSITIONS.POSITIONNAME AS POSNAME, POSITIONS.POSITIONID AS POSID2 FROM RYBROOKS.POSITIONS) \
+        ON POSID2 = POSID)', { team: bin }, {
           outFormat: oracledb.OBJECT // Return the result as Object
         }, (err, result) => {
           if (err) {
@@ -35,6 +45,7 @@ exports.getHitsPerSeason = async function (req, res) {
           } else {
             res.contentType('application/json').status(200);
             res.send(JSON.stringify(result.rows));
+            // console.log(result.rows);
           }
           // Release the connection
           connection.release(
@@ -42,12 +53,12 @@ exports.getHitsPerSeason = async function (req, res) {
               if (err) {
                 console.error(err.message);
               } else {
-                console.log('GET /TotalCount : Connection released');
+                console.log('POST /AvgSalary : Connection released');
               }
             }
           );
         }
-);
+      );
     }
   );
 };

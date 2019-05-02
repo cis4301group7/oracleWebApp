@@ -1,7 +1,7 @@
 const oracledb = require('oracledb');
 const dbConfig = require('../../config/config');
 
-exports.getHitsPerSeason = async function (req, res) {
+exports.posAvgHits = async function (req, res) {
   oracledb.getConnection(
     {
       user: dbConfig.user,
@@ -21,8 +21,15 @@ exports.getHitsPerSeason = async function (req, res) {
       }
 
       connection.execute(
-        'SELECT YEAR, SUM(H) AS HITS FROM RYBROOKS.BATTINGSTATS \
-          GROUP BY YEAR ORDER BY YEAR ASC', {}, {
+        'SELECT POSNAME, PLAYER, TEAM, AVGHITS \
+        FROM ((SELECT APPEARANCES.POSITIONID AS POSID, APPEARANCES.PLAYERID AS PLAYER, \
+        APPEARANCES.TEAMID AS TEAM, CAST(AVG(H) AS INT) AS AVGHITS FROM RYBROOKS.BATTINGSTATS \
+        JOIN RYBROOKS.APPEARANCES ON APPEARANCES.PLAYERID = BATTINGSTATS.PLAYERID \
+        WHERE BATTINGSTATS.YEAR = :year \
+        GROUP BY APPEARANCES.POSITIONID, \
+        APPEARANCES.PLAYERID, APPEARANCES.TEAMID HAVING AVG(H) > 0) \
+        JOIN (SELECT POSITIONS.POSITIONNAME AS POSNAME, POSITIONS.POSITIONID AS POSID2 FROM RYBROOKS.POSITIONS)\
+        ON POSID = POSID2) ', {}, {
           outFormat: oracledb.OBJECT // Return the result as Object
         }, (err, result) => {
           if (err) {
@@ -42,7 +49,7 @@ exports.getHitsPerSeason = async function (req, res) {
               if (err) {
                 console.error(err.message);
               } else {
-                console.log('GET /TotalCount : Connection released');
+                console.log('GET /PositionAvgHits : Connection released');
               }
             }
           );

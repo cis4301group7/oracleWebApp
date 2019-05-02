@@ -1,7 +1,7 @@
 const oracledb = require('oracledb');
 const dbConfig = require('../../config/config');
 
-exports.getHitsPerSeason = async function (req, res) {
+exports.cardThree = async function (req, res) {
   oracledb.getConnection(
     {
       user: dbConfig.user,
@@ -21,8 +21,7 @@ exports.getHitsPerSeason = async function (req, res) {
       }
 
       connection.execute(
-        'SELECT YEAR, SUM(H) AS HITS FROM RYBROOKS.BATTINGSTATS \
-          GROUP BY YEAR ORDER BY YEAR ASC', {}, {
+        'SELECT CAST(AVG(SUM(SALARY)) AS INT) AS TEAMSALARY FROM RYBROOKS.SALARIES GROUP BY TEAMID', {}, {
           outFormat: oracledb.OBJECT // Return the result as Object
         }, (err, result) => {
           if (err) {
@@ -42,7 +41,7 @@ exports.getHitsPerSeason = async function (req, res) {
               if (err) {
                 console.error(err.message);
               } else {
-                console.log('GET /TotalCount : Connection released');
+                console.log('GET /cardThree : Connection released');
               }
             }
           );

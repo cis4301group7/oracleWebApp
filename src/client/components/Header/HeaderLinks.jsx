@@ -10,20 +10,39 @@ import Paper from "@material-ui/core/Paper";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Hidden from "@material-ui/core/Hidden";
 import Poppers from "@material-ui/core/Popper";
+import Modal from '@material-ui/core/Modal';
+import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
 // @material-ui/icons
 import Person from "@material-ui/icons/Person";
 import Notifications from "@material-ui/icons/Notifications";
 import Dashboard from "@material-ui/icons/Dashboard";
 import Search from "@material-ui/icons/Search";
+import BookMarks from "@material-ui/icons/Bookmarks";
 // core components
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import Button from "../../components/CustomButtons/Button.jsx";
+import GridContainer from '../../components/Grid/GridContainer.jsx';
+import CardBody from '../../components/Card/CardBody.jsx';
 
 import headerLinksStyle from "../../assets/jss/material-dashboard-react/components/headerLinksStyle.jsx";
+import { teamReference } from "../../variables/teamReference.jsx";
+
+function getModalStyle() {
+  const top = 50;
+  const left = 50;
+
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: `translate(-${top}%, -${left}%)`,
+  };
+}
 
 class HeaderLinks extends React.Component {
   state = {
-    open: false
+    open: false,
+    teamRef: ''
   };
   handleToggle = () => {
     this.setState(state => ({ open: !state.open }));
@@ -35,6 +54,10 @@ class HeaderLinks extends React.Component {
     }
 
     this.setState({ open: false });
+  };
+
+  handleChangeList = name => event =>{
+    this.setState({ [name]: event.target.value });
   };
 
   render() {
@@ -58,6 +81,30 @@ class HeaderLinks extends React.Component {
             <Search />
           </Button>
         </div> */}
+        <TextField
+          id="teamD"
+          select
+          label="Team Abbreviations"
+          className={classes.textField}
+          value={this.state.teamRef}
+          // onChange={this.handleChangeList('teamOptions')}
+          onChange={this.handleChangeList('teamRef')}
+          // ref={(ref) => { this.teamD = ref; }}
+          // onChange={this.onSubmitCustomPostseasonGraph}
+          // SelectProps={{
+          //   MenuProps: {
+          //     className: classes.menu,
+          //   },
+          // }}
+          // helperText="Please select an option"
+          margin="normal"
+        >
+          {teamReference.map(option => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
+        </TextField>
         <a href="dashboard" style={{ textDecoration: 'none'}} >
         <Button
           color={window.innerWidth > 959 ? "transparent" : "white"}
@@ -153,18 +200,18 @@ class HeaderLinks extends React.Component {
           </Poppers>
         </div> */}
         <a href="user">
-        <Button
-          color={window.innerWidth > 959 ? "transparent" : "white"}
-          justIcon={window.innerWidth > 959}
-          simple={!(window.innerWidth > 959)}
-          aria-label="Person"
-          className={classes.buttonLink}
-        >
-          <Person className={classes.icons} />
-          <Hidden mdUp implementation="css">
-            <p className={classes.linkText}>Profile</p>
-          </Hidden>
-        </Button>
+          <Button
+            color={window.innerWidth > 959 ? "transparent" : "white"}
+            justIcon={window.innerWidth > 959}
+            simple={!(window.innerWidth > 959)}
+            aria-label="Person"
+            className={classes.buttonLink}
+          >
+            <Person className={classes.icons} />
+            <Hidden mdUp implementation="css">
+              <p className={classes.linkText}>Profile</p>
+            </Hidden>
+          </Button>
         </a>
       </div>
     );

@@ -23,7 +23,7 @@ exports.getSumWinsManagerTop = async function (req, res) {
       connection.execute(
         'SELECT RYBROOKS.MANAGERS.PLAYERID AS PLAYERID, NAMEFIRST, NAMELAST, \
           SUM(distinct(RYBROOKS.MANAGERS.W)) AS WINS, SUM(distinct(RYBROOKS.MANAGERS.L)) AS LOSSES, \
-          CAST(round(((SUM(W)/SUM(G))*100),2) as decimal(8,2)) AS WINPCT, \
+          CAST(round(((SUM(W)/SUM(G))*100),1) as decimal(8,2)) AS WINPCT, \
           COUNT(AWARDID) AS AWARDS \
           FROM RYBROOKS.MANAGERS \
           JOIN RYBROOKS.PLAYERS \

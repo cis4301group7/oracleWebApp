@@ -22,12 +22,12 @@ exports.getHonoredManagersTotal = async function (req, res) {
 
       connection.execute(
         'SELECT COUNT(*) AS LIVING FROM \
-          (SELECT COUNT(RYBROOKS.PLAYERS.PLAYERID) FROM RYBROOKS.PLAYERS \
+          (SELECT RYBROOKS.PLAYERS.PLAYERID FROM RYBROOKS.PLAYERS \
           INNER JOIN RYBROOKS.MANAGERS \
           ON RYBROOKS.PLAYERS.PLAYERID = RYBROOKS.MANAGERS.PLAYERID \
           INNER JOIN RYBROOKS.MANAGERAWARDS \
           ON RYBROOKS.MANAGERS.PLAYERID = RYBROOKS.MANAGERAWARDS.PLAYERID \
-          WHERE DEATHYEAR IS NOT NULL \
+          WHERE DEATHYEAR IS NULL \
           GROUP BY RYBROOKS.PLAYERS.PLAYERID)', {}, {
           outFormat: oracledb.OBJECT // Return the result as Object
         }, (err, result) => {

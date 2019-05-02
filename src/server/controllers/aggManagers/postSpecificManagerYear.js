@@ -26,7 +26,7 @@ exports.postSpecificManagerYear = async function (req, res) {
       connection.execute(
         'SELECT RYBROOKS.MANAGERS.PLAYERID AS PLAYERID, NAMEFIRST, NAMELAST, \
           SUM(RYBROOKS.MANAGERS.W) AS WINS, SUM(RYBROOKS.MANAGERS.L) AS LOSSES, \
-          CAST(round(((SUM(RYBROOKS.MANAGERS.W)/SUM(RYBROOKS.MANAGERS.G))*100),2) as decimal(16,2)) AS WINPCT, \
+          CAST(round(((SUM(RYBROOKS.MANAGERS.W)/SUM(RYBROOKS.MANAGERS.G))*100),1) as decimal(16,1)) AS WINPCT, \
           RA, HA, WSWIN, LGWIN, DIVWIN, WCWIN \
           FROM RYBROOKS.MANAGERS \
           INNER JOIN RYBROOKS.PLAYERS \
