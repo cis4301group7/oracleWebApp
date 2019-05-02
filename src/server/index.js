@@ -29,6 +29,14 @@ const honoredManagersTotalController = require('./controllers/aggManagers/getHon
 const specificManagerYearController = require('./controllers/aggManagers/postSpecificManagerYear');
 const maxGamesManagerCoachedController = require('./controllers/aggManagers/postMaxGamesManagerCoached');
 const sumDifferentManagersPerTeamController = require('./controllers/aggManagers/getSumDifferentManagersPerTeam');
+//Teams
+const cardOneController = require('./controllers/TeamStats/cardOne');
+const cardTwoController = require('./controllers/TeamStats/cardTwo');
+const cardThreeController = require('./controllers/TeamStats/cardThree');
+const graphOneController = require('./controllers/TeamStats/graphOne');
+const tableTwoController = require('./controllers/TeamStats/tableTwo');
+const tableThreeController = require('./controllers/TeamStats/tableThree');
+const tableOneController = require('./controllers/TeamStats/tableOne');
 
 const app = express();
 
@@ -61,6 +69,15 @@ app.get('/api/getHonoredManagersTotal', honoredManagersTotalController.getHonore
 app.get('/api/getSumDifferentManagersPerTeam', sumDifferentManagersPerTeamController.getSumDifferentManagersPerTeam);
 app.post('/api/postSpecificManagerYear', specificManagerYearController.postSpecificManagerYear);
 app.post('/api/postMaxGamesManagerCoached', maxGamesManagerCoachedController.postMaxGamesManagerCoached);
+//Teams
+app.get('/api/cardOne', cardOneController.cardOne);
+app.get('/api/cardTwo', cardTwoController.cardTwo);
+app.get('/api/cardThree', cardThreeController.cardThree);
+app.get('/api/graphOne', graphOneController.graphOne);
+app.get('/api/tableTwo', tableTwoController.tableTwo);
+app.post('/api/tableThree', tableThreeController.tableThree);
+app.post('/api/tableOne', tableOneController.tableOne);
+
 
 app.use(express.static('dist'));
 
