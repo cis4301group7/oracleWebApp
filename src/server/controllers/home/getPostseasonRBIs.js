@@ -21,7 +21,7 @@ exports.getPostseasonRBIs = async function (req, res) {
       }
 
       connection.execute(
-        'SELECT YEAR, COUNT(RBI) AS RBI FROM RYBROOKS.POSTSEASONBATTINGSTATS  \
+        'SELECT YEAR, SUM(RBI) AS RBI FROM RYBROOKS.POSTSEASONBATTINGSTATS  \
         WHERE YEAR > 1962 \
         GROUP BY YEAR ORDER BY YEAR ASC', {}, {
           outFormat: oracledb.OBJECT // Return the result as Object

@@ -595,13 +595,13 @@ class Dashboard extends React.Component {
         lineSmooth: Chartist.Interpolation.cardinal({
           tension: 0
         }),
-        low: 750,
-        high: 1500, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+        low: 25500,
+        high: 45500, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
         chartPadding: {
           top: 12,
           right: 0,
           bottom: 0,
-          left: 0
+          left: 8
         }
       },
       // for animation
@@ -841,8 +841,8 @@ class Dashboard extends React.Component {
         lineSmooth: Chartist.Interpolation.cardinal({
           tension: 0
         }),
-        low: 30,
-        high: 400, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+        low: 12,
+        high: 360, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
         chartPadding: {
           top: 12,
           right: 0,
@@ -1092,14 +1092,21 @@ class Dashboard extends React.Component {
                           </Typography>
                           <CardBody>
                             <Typography variant="subtitle4" id="simple-modal-description">
-                            SELECT YEAR, ROUND, x.TEAMNAME AS WINTEAM, y.TEAMNAME AS LOSETEAM 
-                            FROM RYBROOKS.POSTSEASONSERIES c 
-                            INNER JOIN RYBROOKS.TEAMS x 
-                            ON x.TEAMID = c.TEAMIDWINNER 
-                            INNER JOIN RYBROOKS.TEAMS y 
-                            ON y.TEAMID = c.TEAMIDLOSER 
-                            WHERE WINS >= 4 AND LOSSES = 0 AND ROUND = 'WS'
-                            ORDER BY YEAR ASC
+                            SELECT RYBROOKS.POSTSEASONBATTINGSTATS.YEAR, RYBROOKS.TEAMS.TEAMNAME, 
+                            SUM(RYBROOKS.POSTSEASONBATTINGSTATS.R) AS TotalRuns, 
+                            SUM(RYBROOKS.POSTSEASONBATTINGSTATS.H) AS TotalHits, 
+                            SUM(RYBROOKS.POSTSEASONBATTINGSTATS.DOUBLES) AS TotalDBs, 
+                            SUM(RYBROOKS.POSTSEASONBATTINGSTATS.TRIPLES) AS TotalTRIPs, 
+                            SUM(RYBROOKS.POSTSEASONBATTINGSTATS.HR) AS TotalHRs, 
+                            SUM(RYBROOKS.POSTSEASONBATTINGSTATS.AB) AS TotalABs 
+                            FROM (RYBROOKS.POSTSEASONBATTINGSTATS 
+                            INNER JOIN RYBROOKS.PLAYERS 
+                            ON RYBROOKS.PLAYERS.PLAYERID = RYBROOKS.POSTSEASONBATTINGSTATS.PLAYERID) 
+                            INNER JOIN RYBROOKS.TEAMS 
+                            ON RYBROOKS.TEAMS.TEAMID = RYBROOKS.POSTSEASONBATTINGSTATS.TEAMID 
+                            WHERE RYBROOKS.POSTSEASONBATTINGSTATS.TEAMID = :team 
+                            GROUP BY RYBROOKS.POSTSEASONBATTINGSTATS.YEAR, RYBROOKS.TEAMS.TEAMNAME 
+                            ORDER BY TotalRuns DESC
                             </Typography>
                           </CardBody>
                           <GridContainer>

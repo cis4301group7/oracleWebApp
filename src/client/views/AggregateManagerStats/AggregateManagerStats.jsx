@@ -1042,7 +1042,7 @@ class AggregateManagerStats extends React.Component {
               </CardHeader>
               <CardFooter stats>
                 <div className={classes.stats}>
-                  Living Managers who have received an award
+                  Living Managers who have received an award on their own
                 </div>
               </CardFooter>
             </Card>
@@ -1185,7 +1185,7 @@ class AggregateManagerStats extends React.Component {
               <CardBody>
                 <h4 className={classes.cardTitle}>Manager Ages Each Year</h4>
                 <p className={classes.cardCategory}>
-                  The max age of every manager each year since 1984
+                  The max age of all managers each year since 1962
                 </p>
               </CardBody>
             </Card>
@@ -1214,14 +1214,22 @@ class AggregateManagerStats extends React.Component {
                           </Typography>
                           <CardBody>
                             <Typography variant="subtitle4" id="simple-modal-description">
-                            SELECT YEAR, ROUND, x.TEAMNAME AS WINTEAM, y.TEAMNAME AS LOSETEAM 
-                            FROM RYBROOKS.POSTSEASONSERIES c 
-                            INNER JOIN RYBROOKS.TEAMS x 
-                            ON x.TEAMID = c.TEAMIDWINNER 
-                            INNER JOIN RYBROOKS.TEAMS y 
-                            ON y.TEAMID = c.TEAMIDLOSER 
-                            WHERE WINS >= 4 AND LOSSES = 0 AND ROUND = 'WS'
-                            ORDER BY YEAR ASC
+                            SELECT RYBROOKS.MANAGERS.PLAYERID AS PLAYERID, NAMEFIRST, NAMELAST, 
+                            SUM(distinct(RYBROOKS.MANAGERS.W)) AS WINS, SUM(distinct(RYBROOKS.MANAGERS.L)) AS LOSSES, 
+                            CAST(round(((SUM(W)/SUM(G))*100),1) as decimal(8,2)) AS WINPCT, 
+                            COUNT(AWARDID) AS AWARDS 
+                            FROM RYBROOKS.MANAGERS 
+                            JOIN RYBROOKS.PLAYERS 
+                            ON RYBROOKS.PLAYERS.PLAYERID = RYBROOKS.MANAGERS.PLAYERID 
+                            JOIN RYBROOKS.MANAGERAWARDS 
+                            ON RYBROOKS.PLAYERS.PLAYERID = RYBROOKS.MANAGERAWARDS.PLAYERID 
+                            JOIN RYBROOKS.HALLOFFAME 
+                            ON RYBROOKS.PLAYERS.PLAYERID = RYBROOKS.HALLOFFAME.PLAYERID 
+                            JOIN RYBROOKS.TEAMS 
+                            ON RYBROOKS.MANAGERS.TEAMID = RYBROOKS.TEAMS.TEAMID 
+                            WHERE INDUCTED = 'Y' 
+                            GROUP BY RYBROOKS.MANAGERS.PLAYERID, NAMEFIRST, NAMELAST 
+                            ORDER BY WINS DESC, AWARDS DESC, SUM(G) DESC
                             </Typography>
                           </CardBody>
                           <GridContainer>
@@ -1250,7 +1258,7 @@ class AggregateManagerStats extends React.Component {
               </CardBody>
             </Card>
           </GridItem>
-          <GridItem xs={12} sm={12} md={12}>
+          <GridItem xs={12} sm={12} md={6}>
             <Card chart>
               <CardHeader color="warning">
                 <ChartistGraph
@@ -1266,6 +1274,26 @@ class AggregateManagerStats extends React.Component {
                 <h4 className={classes.cardTitle}>Different Managers Per Team</h4>
                 <p className={classes.cardCategory}>
                   Number of Different Managers each Team has had since 1974
+                </p>
+              </CardBody>
+            </Card>
+          </GridItem>
+          <GridItem xs={12} sm={12} md={6}>
+            <Card chart>
+              <CardHeader color="info">
+                <ChartistGraph
+                  className="ct-chart"
+                  data={managerAvgSalaryTeam.data}
+                  type="Bar"
+                  options={managerAvgSalaryTeam.options}
+                  responsiveOptions={managerAvgSalaryTeam.responsiveOptions}
+                  listener={managerAvgSalaryTeam.animation}
+                />
+              </CardHeader>
+              <CardBody>
+                <h4 className={classes.cardTitle}>Team Manager Salaries</h4>
+                <p className={classes.cardCategory}>
+                  Average manager salaries paid by each team since 1974
                 </p>
               </CardBody>
             </Card>
@@ -1336,8 +1364,8 @@ class AggregateManagerStats extends React.Component {
                     </div>
                   )
                   }
-                  title="Total Games Coached by a Manager"
-                  subheader="Sum of games coached by a manager on a specific team"
+                  title="Ranked Managers per Team"
+                  subheader="A specific team's ranked list of managers based on tenure and game win percentage"
                 />
               </CardHeader>
               <CardBody>
@@ -1377,26 +1405,6 @@ class AggregateManagerStats extends React.Component {
                   // tableData={realTable}
                   tableData={countMaxGamesManagerCoached}
                 />
-              </CardBody>
-            </Card>
-          </GridItem>
-          <GridItem xs={12} sm={12} md={12}>
-            <Card chart>
-              <CardHeader color="info">
-                <ChartistGraph
-                  className="ct-chart"
-                  data={managerAvgSalaryTeam.data}
-                  type="Bar"
-                  options={managerAvgSalaryTeam.options}
-                  responsiveOptions={managerAvgSalaryTeam.responsiveOptions}
-                  listener={managerAvgSalaryTeam.animation}
-                />
-              </CardHeader>
-              <CardBody>
-                <h4 className={classes.cardTitle}>Team Manager Salaries</h4>
-                <p className={classes.cardCategory}>
-                  Average manager salaries paid by each team since 1974
-                </p>
               </CardBody>
             </Card>
           </GridItem>

@@ -21,7 +21,7 @@ exports.getHitsPerSeason = async function (req, res) {
       }
 
       connection.execute(
-        'SELECT YEAR, COUNT(H) AS HITS FROM RYBROOKS.BATTINGSTATS \
+        'SELECT YEAR, SUM(H) AS HITS FROM RYBROOKS.BATTINGSTATS \
           GROUP BY YEAR ORDER BY YEAR ASC', {}, {
           outFormat: oracledb.OBJECT // Return the result as Object
         }, (err, result) => {
