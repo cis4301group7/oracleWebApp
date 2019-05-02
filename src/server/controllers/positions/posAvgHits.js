@@ -2,6 +2,8 @@ const oracledb = require('oracledb');
 const dbConfig = require('../../config/config');
 
 exports.posAvgHits = async function (req, res) {
+  const bin = req.query.year;
+
   oracledb.getConnection(
     {
       user: dbConfig.user,
@@ -28,8 +30,8 @@ exports.posAvgHits = async function (req, res) {
         WHERE BATTINGSTATS.YEAR = :year \
         GROUP BY APPEARANCES.POSITIONID, \
         APPEARANCES.PLAYERID, APPEARANCES.TEAMID HAVING AVG(H) > 0) \
-        JOIN (SELECT POSITIONS.POSITIONNAME AS POSNAME, POSITIONS.POSITIONID AS POSID2 FROM RYBROOKS.POSITIONS)\
-        ON POSID = POSID2) ', {}, {
+        JOIN (SELECT POSITIONS.POSITIONNAME AS POSNAME, POSITIONS.POSITIONID AS POSID2 FROM RYBROOKS.POSITIONS) \
+        ON POSID = POSID2) ', { year: bin }, {
           outFormat: oracledb.OBJECT // Return the result as Object
         }, (err, result) => {
           if (err) {
